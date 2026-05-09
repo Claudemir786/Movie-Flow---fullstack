@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         marginBottom:8
     },
     text:{
-        fontSize:23,
+        fontSize:21,
         color:'#878a95',
         fontWeight:'500',
         
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     input:{
         backgroundColor:'#0F172B',
         color:'#878A95',
-        padding:25,
+        padding:20,
         fontSize:25,
         width:'90%',
         alignSelf:'center',

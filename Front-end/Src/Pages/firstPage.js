@@ -7,7 +7,7 @@ import ButtonD from '../Components/ButtonDefault';
 
 
 
-export default function FirstPage() {
+export default function FirstPage({navigation}) {
 
      
 
@@ -32,8 +32,8 @@ export default function FirstPage() {
                 <Text style={styles.subtitle}>disponível, tudo em um só lugar</Text>
             </View>
 
-            <ButtonD/>
-            <ButtonD text='Já tenho uma conta' color='#0F172B'/>
+            <ButtonD onpress={()=>navigation.navigate("Register")}/>
+            <ButtonD text='Já tenho uma conta' color='#0F172B' onpress={()=>navigation.navigate("Login")}/>
 
         </ScrollView>
    
