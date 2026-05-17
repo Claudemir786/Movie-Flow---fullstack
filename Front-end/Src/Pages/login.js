@@ -13,7 +13,7 @@ export default function Login({navigation}){
 
     function handleLogin(){
         console.log(`dados que foram recebidos ${email} ${password}`)
-        navigation.navigate("Home")
+        navigation.navigate("Tabs")
     }
 
     
