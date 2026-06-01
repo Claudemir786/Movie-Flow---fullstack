@@ -6,6 +6,8 @@ import Register from "../Pages/register";
 import FirstPage from "../Pages/firstPage";
 import ForgotPass from "../Pages/forgotPassword";
 import Tabs from "./tabs";
+import ListCategoty from "../Pages/listCategory";
+
 
 const STACK = createNativeStackNavigator()
 
@@ -20,6 +22,9 @@ export default function Stack(){
             <STACK.Screen name="Register" component={Register}/>
             <STACK.Screen name="FirstPage" component={FirstPage}/>
             <STACK.Screen name="ForgotPass" component={ForgotPass}/>
+            <STACK.Screen name="ListCategory" component={ListCategoty}/>
+            
+            
 
         </STACK.Navigator>
    )

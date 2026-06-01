@@ -4,7 +4,21 @@ import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 
-export default function Search(){
+
+export default function Search({navigation}){
+
+    
+
+    function movieCategory(name){
+        
+        console.log("categoria filme: ", name);
+        navigation.navigate("ListCategory",{category:name, type:"movie"})
+    }
+
+    function serieCategory(name){
+        console.log("categoria série: ", name)
+        navigation.navigate("ListCategory",{category:name, type:"serie"})
+    }
 
     return(
        <ScrollView style={styles.container}>
@@ -38,24 +52,25 @@ export default function Search(){
 
             {/*botões */}
             <View style={{flexDirection:'row', width:'90%', justifyContent:'space-evenly'}}>
-                <TouchableOpacity style={styles.buttonCategoryMovie}>
+
+                <TouchableOpacity style={styles.buttonCategoryMovie} onPress={()=>movieCategory("acao")}>
                     <Text style={styles.textButton}>Ação</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.buttonCategoryMovie}>
+                <TouchableOpacity style={styles.buttonCategoryMovie} onPress={()=>movieCategory("comedia")}>
                     <Text style={styles.textButton}>Comédia</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.buttonCategoryMovie}>
+                <TouchableOpacity style={styles.buttonCategoryMovie} onPress={()=> movieCategory("terror")}>
                     <Text style={styles.textButton}>Terror</Text>
                 </TouchableOpacity>               
             </View>
             <View style={{flexDirection:'row', width:'90%', justifyContent:'space-evenly', marginTop:'5%'}}>
-                <TouchableOpacity style={styles.buttonCategoryMovie}>
+                <TouchableOpacity style={styles.buttonCategoryMovie} onPress={()=> movieCategory('romance')}>
                     <Text style={styles.textButton}>Romance</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.buttonCategoryMovie}>
+                <TouchableOpacity style={styles.buttonCategoryMovie} onPress={()=>movieCategory("ficcao cientifica")}>
                     <Text style={styles.textButton}>Ficção Científica</Text>
                 </TouchableOpacity>    
 
@@ -73,40 +88,40 @@ export default function Search(){
              {/*botões */}
             <View>
                  <View style={{flexDirection:'row', width:'90%', justifyContent:'space-evenly'}}>
-                <TouchableOpacity style={styles.buttonCategorySerie}>
+                <TouchableOpacity style={styles.buttonCategorySerie} onPress={()=>serieCategory("acao")}>
                     <Text style={styles.textButton}>Ação</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.buttonCategorySerie}>
+                <TouchableOpacity style={styles.buttonCategorySerie} onPress={()=>serieCategory("comedia")}>
                     <Text style={styles.textButton}>Comédia</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.buttonCategorySerie}>
+                <TouchableOpacity style={styles.buttonCategorySerie} onPress={()=>serieCategory("terror")}>
                     <Text style={styles.textButton}>Terror</Text>
                 </TouchableOpacity>               
             </View>
             <View style={{flexDirection:'row', width:'90%', justifyContent:'space-evenly', marginTop:'5%'}}>
-                <TouchableOpacity style={styles.buttonCategorySerie}>
+                <TouchableOpacity style={styles.buttonCategorySerie} onPress={()=>serieCategory("romance")}>
                     <Text style={styles.textButton}>Romance</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.buttonCategorySerie}>
+                <TouchableOpacity style={styles.buttonCategorySerie} onPress={()=>serieCategory("ficcao cientifica")}>
                     <Text style={styles.textButton}>Ficção Científica</Text>
                 </TouchableOpacity>                
             </View>
 
             <View style={{flexDirection:'row', width:'90%', justifyContent:'space-evenly', marginTop:'5%'}} >
-                <TouchableOpacity style={styles.buttonCategorySerie}>
+                <TouchableOpacity style={styles.buttonCategorySerie} onPress={()=>serieCategory("reality")}>
                     <Text style={styles.textButton}>Reality</Text>
                 </TouchableOpacity>  
 
-                 <TouchableOpacity style={styles.buttonCategorySerie}>
+                 <TouchableOpacity style={styles.buttonCategorySerie} onPress={()=>serieCategory("kids")}>
                     <Text style={styles.textButton}>Kids</Text>
                 </TouchableOpacity>  
 
             </View>
             
-
+                
             </View>
         </View>
 
