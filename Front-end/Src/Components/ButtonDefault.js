@@ -1,7 +1,7 @@
 import {View,Text,StyleSheet,TouchableOpacity} from 'react-native'
 import { Button } from 'react-native-web'
 
-export default function ButtonD({text = 'Começar agora ',color = '#4F39F6',onpress}){
+export default function ButtonD({text = 'Começar agora ',color = '#4F39F6',onpress, textColor}){
 
     return(
         <View style={styles.container}>
@@ -11,7 +11,7 @@ export default function ButtonD({text = 'Começar agora ',color = '#4F39F6',onpr
                 [styles.button, {backgroundColor:color}]}
                 onPress={onpress}>
 
-                    <Text style={styles.text}>{text}</Text>
+                    <Text style={[styles.text, {color:textColor}]}>{text}</Text>
 
             </TouchableOpacity>
         </View>

@@ -7,6 +7,10 @@ import FirstPage from "../Pages/firstPage";
 import ForgotPass from "../Pages/forgotPassword";
 import Tabs from "./tabs";
 import ListCategoty from "../Pages/listCategory";
+import Profile from "../Pages/profile";
+import AccountDetails from "../Pages/accountDetails";
+import AccountSecurity from "../Pages/accountSecurity";
+import HelpCenter from "../Pages/helpCenter";
 
 
 const STACK = createNativeStackNavigator()
@@ -23,6 +27,12 @@ export default function Stack(){
             <STACK.Screen name="FirstPage" component={FirstPage}/>
             <STACK.Screen name="ForgotPass" component={ForgotPass}/>
             <STACK.Screen name="ListCategory" component={ListCategoty}/>
+            <STACK.Screen name="Profile" component={Profile}/>
+            <STACK.Screen name="AccountDetails" component={AccountDetails}/>
+            <STACK.Screen name="AccountSecurity" component={AccountSecurity}/>
+            <STACK.Screen name="HelpCenter" component={HelpCenter}/>
+            
+
             
             
 
