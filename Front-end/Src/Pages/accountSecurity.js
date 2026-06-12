@@ -1,4 +1,4 @@
-import { View,ScrollView,Text,TextInput, StyleSheet, TouchableOpacity, Modal } from "react-native";
+import { View,ScrollView,Text,TextInput, StyleSheet, TouchableOpacity, Modal, Alert } from "react-native";
 import Feather from '@expo/vector-icons/Feather';
 import { Switch } from "react-native";
 import { useState } from "react";
@@ -10,7 +10,13 @@ export default function AccountSecurity({navigation}){
     const [active,setActive] = useState(false)
     const [activeData, setActiveData] = useState(false)
     const [alterPass, setAlterPass] = useState(false)
+    const [password,setPassword] = useState("")
+    const [newPassword,setNewPassword] = useState("")
 
+    function handlePassword(){
+        alert("Senha alterada com sucesso")
+        setAlterPass(false)
+    }
 
    
     return(
@@ -65,9 +71,9 @@ export default function AccountSecurity({navigation}){
             <Modal visible={alterPass} transparent={true} animationType="fade">
                 <View style={styles.overlay}>
                     <View style={styles.modal}>
-                        <InputD label="digite a senha atual" placeholder="*******" passaword={true} />            
-                        <InputD label="digite a nova senha" placeholder="*******" passaword={true}/>
-                        <ButtonD text="Enviar" onpress={()=>setAlterPass(false)}/>
+                        <InputD label="digite a senha atual" placeholder="*******" passaword={true} value={password} onChange={setPassword}/>            
+                        <InputD label="digite a nova senha" placeholder="*******" passaword={true} value={newPassword} onChange={setNewPassword}/>
+                        <ButtonD text="Enviar" onpress={()=>handlePassword()}/>                          
                     </View>
                     
                 </View>                  

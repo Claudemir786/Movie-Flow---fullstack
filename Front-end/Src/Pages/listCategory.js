@@ -8,10 +8,14 @@ export default function ListCategoty({navigation, route}){
    const {category,type} = route.params
   
    
+   
 
     return(
         <View>
             <Text>CATEGORIA QUE VEIO RECEBIDA {category} e tipo {type} </Text>
+            <Text></Text>
+            
+            
             
         </View>
     )
