@@ -1,19 +1,79 @@
-import { Text, StyleSheet,View, ScrollView, TextInput, ImageBackground, TouchableOpacity } from "react-native";
+import { useEffect, useState } from "react";
+import { Text, StyleSheet,View, ScrollView, TextInput, ImageBackground, TouchableOpacity, FlatList } from "react-native";
+import { SearchFilmsTv, SearchMovieTv, Trending } from "../service/moviesAndTv.js";
 
 
 export default function Home({navigation}){
 
+    const [trending,setTrending] = useState([])
+    const [titleMovieTv,setTitleMovieTv] = useState("")
+    const [searchMovieTv,setSerchMovieTv] = useState([])
+    const [searchActive,setSearchActive] = useState(false)
+
+    //traz todos os filmes e series que estão em alta
+    async function handleTrending(){
+        try {            
+            const result = await Trending()
+
+            if(result){
+                
+                setTrending(result)
+                //console.log("dados retornaram: ", result)
+
+            }else{
+                console.log("dados não retornaram: ", result)
+               
+            }
+
+        } catch (error) {
+            console.error("Falha ao trazer os dados para a pagina: ", error)
+        }
+    }
+
+    //função que retorna dados de acordo com a pesquisa
+    async function handleSearch() {       
+       try {
+            //chama a função que faz a conexão com a API
+            const result = await SearchMovieTv(titleMovieTv)
+            if(result){
+                console.log("dados retornaram corretamente")
+                //atualiza o valor da variavel para ser exibida
+                setSerchMovieTv(result)
+                setSearchActive(true)
+
+            }else{
+                console.warn("Dados não retornaram corretamente: ", result);
+            }
+            
+        } catch (error) {
+            console.error("falha ao buscar dados de pesquisa: ", error);
+        }
+    }
+
+    //ja renderiza a tela chamando os dados 
+    useEffect(()=>{
+        handleTrending()
+    },[]);
+
+
     //retorna a lista de filmes e séries
-    const LIST = ()=>{
+    const LIST = ({movieTv})=>{
 
         return(
             <TouchableOpacity>
                 <ImageBackground
-                    source={require('../Assets/i554287.jpeg')}
+                    source={{
+                        uri:`https://image.tmdb.org/t/p/w500${movieTv.backdrop_path}`
+                    }}
                     style={styles.card}
                     imageStyle={styles.image}
                 >
-                <Text style={styles.textCard}>titulo</Text>
+                {movieTv.title &&(
+                     <Text style={styles.textCard}>{movieTv.title}</Text>
+                )}    
+                {movieTv.name &&(
+                    <Text style={styles.textCard}>{movieTv.name}</Text>
+                )}
 
                 </ImageBackground>
 
@@ -37,35 +97,50 @@ export default function Home({navigation}){
                 <TextInput 
                     style={styles.search}
                     placeholder="Buscar filmes e séries"
+                    onChangeText={setTitleMovieTv}
+                    onSubmitEditing={()=>{handleSearch()}}
                 />
             </View>
 
-            {/*populares na região*/}
-            <Text style={[styles.title, {fontSize:23, width:'90%', alignSelf:'center'}]}>
-                    Populares na sua região
-            </Text>
-            
+
             <View style={styles.body}>              
 
-                {/*card*/}
-              <ImageBackground 
-                source={require('../Assets/images.jpeg')}
-                style={styles.card}
-                imageStyle={styles.image}
-              >
-
-              </ImageBackground>
-
-              <TouchableOpacity>
-                <ImageBackground
-                    source={require('../Assets/i554287.jpeg')}
-                    style={styles.card}
-                    imageStyle={styles.image}
-                >
-                <Text style={styles.textCard}>The Batman</Text>
-              </ImageBackground>
-              </TouchableOpacity>
+            {/*card*/}
+            {!searchActive &&(
+                <>
+                {/*populares na região*/}
+                <Text style={styles.title }>
+                        Populares na sua região
+                </Text>
+            
+                <FlatList
+                    data={trending}
+                    keyExtractor={(item)=>item.id}
+                    renderItem={({item})=> <LIST movieTv={item}/>}
+                
+                />
+                </>
              
+            )}
+            {searchActive &&(
+                <>
+                    {/*Resultado da pesquisa*/}
+                    <Text style={styles.title}>
+                            Resultados da pesquisa
+                    </Text>
+            
+                    <FlatList
+                        data={searchMovieTv}
+                        keyExtractor={(item)=>item.id}
+                        renderItem={({item})=> <LIST movieTv={item}/>}
+                    
+                />
+                </>
+              
+             
+            )}
+
+            
             </View>
 
 
@@ -89,7 +164,8 @@ const styles = StyleSheet.create({
     },
     title:{
         color:"#fff",
-        fontSize:28
+        fontSize:28,
+        marginBottom:'5%'
     },
     subTitle:{
         color:'#878a95',
@@ -98,7 +174,7 @@ const styles = StyleSheet.create({
     viewSearch:{
         width:'90%',
         alignSelf:'center',
-        marginBottom:'10%'
+        marginBottom:'5%'
     
     },
     search:{
@@ -110,7 +186,7 @@ const styles = StyleSheet.create({
     body:{
         width:'90%',
         alignSelf:'center',
-        marginTop:'10%',     
+        marginTop:'5%',     
        
 
     },

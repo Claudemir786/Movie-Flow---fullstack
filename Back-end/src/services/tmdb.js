@@ -40,19 +40,20 @@ export class Tmdb{
     async Search(req,res){
         
         try {
-
-            if(!req.body)return messageError(res,400,"body não foi enviado")
-            const{search} = req.body
+            //guarda os dados enviados via url
+           
+            const search = req.query.search;
             if(!search)return messageError(res,400,"o dado foi enviado incorretamente") 
             //codifica o nome de busca para não ser interpretado errodo caso o nome de busca tenha espaço ou algum caracter diferente por exemplo 
             const searchName = encodeURIComponent(search);
 
             const result  = await fetch(`${defaultEndpoint}search/multi?query=${searchName}${languageRegion}`,options("GET"))
-
-            if(!result.ok)throw new Error("Dados não retornam corretamente da API externa TMDB")
-            const resultSearch = await result.json()
             
-            return res.status(200).json({success:true, resultSearch})
+            if(!result.ok)throw new Error("Dados não retornam corretamente da API externa TMDB")
+            const resultSearch = await result.json();
+            
+            
+            return res.status(200).json({success:true, result:resultSearch})
                 
                 
             
@@ -66,12 +67,12 @@ export class Tmdb{
     async Trending(req,res){
 
         try {
-
+            //console.log("teste de chegada")
             const result = await fetch(`${defaultEndpoint}trending/all/day?${languageRegion}`, options('GET'))
             if(!result.ok)throw new Error("Dados não retornam corretamente da API externa TMDB")
             
             const trending = await result.json();
-            return res.status(200).json({success:true, trending})
+            return res.status(200).json({success:true, trending:trending})
 
             
         } catch (error) {
