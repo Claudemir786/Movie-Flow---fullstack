@@ -13,6 +13,7 @@ const options = (method)=>{
 }
 
 
+
 const defaultEndpoint = "https://api.themoviedb.org/3/"
 //região e idioma do Brasil
 const languageRegion = "&language=pt-BR&region=BR"
