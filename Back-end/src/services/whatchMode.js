@@ -32,22 +32,31 @@ export class WhatchMode{
             if(type == "tv"){
                 //chama a função que ira buscar as plataformas da serie em questão
                 const plataform = await findTvMovie(id,'tmdb_tv_id');
+                //caso o retorno seja false
+                if(!plataform)return messageError(res,401,"falha ao encontar serie na base de dados")
+                 //retorna sucesso e o array com as plataformas 
+                return res.status(200).json({success:true, plataform:plataform})
+                    
 
 
             }else if(type == "movie"){
                 //chama a função que ira buscar as plataformas de streaming do filme em questão
                 const plataform = await findTvMovie(id,"tmdb_movie_id")
+                //caso o retorno seja false
+                if(!plataform)return messageError(res,401,"falha ao encontar filme na base de dados")
+                //retorna sucesso e o array com as plataformas    
+                return res.status(200).json({success:true, plataform:plataform})
 
             }else{
-                //pode acontecer de não vier nem um nem outro 
+                //pode acontecer de não vir nem um nem outro 
                 return res.status(200).json({success:true, type:undefined})
-            }                              
+            }                            
 
-            return messageSuccess(res,200,"conectado com sucesso")    
+               
 
         }catch(error){
             console.log("Erro: ", error.message)
-            return messageError(res,401,error.message)
+            return messageError(res,401,"falha ao realizar o processo de busca das plataformas diponiveis");
         }
     }
 }
@@ -83,12 +92,19 @@ export class WhatchMode{
 
         //faz um array com apenas os nomes da plataformas de streaming
         const list = plataformStreaming.map(item => {return item.name})
-        return list;
+
+        //verifica se veio dados repetidos e os remove
+        const unicList = [...new Set(list)]
+        //se nada estiver repetido retorna a lista(list) original
+        if(unicList === " ") return list
+
+        return unicList;
     } catch (error) {
         console.log("erro ao buscar dados relacionado ao streaming: ", error)
         return false
     }
  }
+ //2316
 
 
 

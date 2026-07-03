@@ -11,6 +11,7 @@ import Profile from "../Pages/profile";
 import AccountDetails from "../Pages/accountDetails";
 import AccountSecurity from "../Pages/accountSecurity";
 import HelpCenter from "../Pages/helpCenter";
+import Tvmovie from "../Pages/tvMovie";
 
 
 const STACK = createNativeStackNavigator()
@@ -31,7 +32,7 @@ export default function Stack(){
             <STACK.Screen name="AccountDetails" component={AccountDetails}/>
             <STACK.Screen name="AccountSecurity" component={AccountSecurity}/>
             <STACK.Screen name="HelpCenter" component={HelpCenter}/>
-            
+            <STACK.Screen name="TvMovie" component={Tvmovie}/>
 
             
             

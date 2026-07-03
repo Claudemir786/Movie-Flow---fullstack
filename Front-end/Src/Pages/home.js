@@ -60,7 +60,7 @@ export default function Home({navigation}){
     const LIST = ({movieTv})=>{
 
         return(
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>navigation.navigate("TvMovie",{tvMovie:movieTv})}>
                 <ImageBackground
                     source={{
                         uri:`https://image.tmdb.org/t/p/w500${movieTv.backdrop_path}`

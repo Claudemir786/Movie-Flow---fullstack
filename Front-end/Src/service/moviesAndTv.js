@@ -52,3 +52,27 @@ export async function SearchMovieTv(title){
         return false;
     }
 }
+
+export async function SearchStreaming(dataTvMovie){   
+    try {
+        let result;
+      //se for filme  
+      if(dataTvMovie.title){
+        result = await fetch(`${URL}plataform?name=movie&id=${dataTvMovie.id}`, options("GET"))
+        
+      //se for serie  
+      }else{
+        result = await fetch(`${URL}plataform?name=tv&id=${dataTvMovie.id}`, options("GET"))
+
+      }
+      if(!result.ok)throw new Error("Falha ao retornar dados da API")
+      const streaming = await result.json();
+      return streaming.plataform;    
+      
+        
+    } catch (error) {
+        console.error("Não foi possivel encontrar dados de streaming: ", error)
+        return false
+    }
+
+}
