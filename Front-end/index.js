@@ -11,9 +11,10 @@ import Profile from './Src/Pages/profile';
 import AccountDetails from './Src/Pages/accountDetails';
 import AccountSecurity from './Src/Pages/accountSecurity';
 import HelpCenter from './Src/Pages/helpCenter';
+import Tvmovie from './Src/Pages/tvMovie';
 
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in Expo Go or in a native build,
 // the environment is set up appropriately
-registerRootComponent(App);
+registerRootComponent(Tvmovie);
