@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
-import { Text, View, ActivityIndicator, StyleSheet, ScrollView, ImageBackground, TouchableOpacity } from "react-native";
+import { Text, View, ActivityIndicator, StyleSheet, ScrollView, ImageBackground, TouchableOpacity, Linking, FlatList } from "react-native";
 import { SearchStreaming } from "../service/moviesAndTv.js";
 import Feather from '@expo/vector-icons/Feather';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 
 
+
+
 export default function Tvmovie({navigation,route}){
-    /*const[dataTvMovie,setDataTvMovie] = useState([])
-    const[streaming,setStreaming] =useState([])
+    const[dataTvMovie,setDataTvMovie] = useState([])
+    const[streaming,setStreaming] = useState([])
+    const[notFound,setNotFound] = useState(false)
+    const[loading,setLoading] = useState(true)
 
     useEffect(()=>{
         const{tvMovie} = route.params
@@ -24,14 +28,53 @@ export default function Tvmovie({navigation,route}){
             if(!streamingFinded){
                 console.log("falha ao encontrar dados")
             }else{ 
-                console.log("dados que retornaram para a tela: ", streamingFinded);               
+                //console.log("dados que retornaram para a tela: ", streamingFinded);               
                 setStreaming(streamingFinded)
+                setLoading(false)
+                if(streamingFinded == ""){
+                    setNotFound(true)
+                    
+                }
             }
         } catch (error){
             console.error("falha ao carregar dados do filme ou série")
         }
     }
-*/
+
+
+// abrir links dos sites
+async function openLink(url) {
+
+    const open = await Linking.canOpenURL(url)
+
+    if(open){
+        await Linking.openURL(url)
+    }else{
+        alert("não foi possivel abrir o link para a plataforma")
+    }
+}
+
+//componente que renderiza os opções de streaming
+const RenderListStreaming =({plataform})=>{
+    return(
+        <>
+         {/*plataformas disponiveis*/}
+            <View style={styles.plataforms}>
+
+                <TouchableOpacity style={styles.card} onPress={()=> openLink(plataform.web_url)}>
+                    
+                    <View style={styles.sectionCard}>
+                        <Text style={{color:'#fff', fontSize:23}}>{plataform?.name}</Text>
+                        <Text style={{fontSize:18,color:'#808180', marginTop:'2%'}}>Plataforma</Text>
+                    </View>
+                </TouchableOpacity>                  
+                
+
+            </View>
+            </>
+    )
+
+}
     
 
   
@@ -41,7 +84,7 @@ export default function Tvmovie({navigation,route}){
             {/*Imagem de fundo*/}
             <ImageBackground 
                  source={//require('../Assets/i554287.jpeg')
-                    {uri:'https://image.tmdb.org/t/p/w500/zQ8AxTPiCiS5nnwXpwTBPBHSaa5.jpg'}
+                    {uri:`https://image.tmdb.org/t/p/w500${dataTvMovie.backdrop_path}`}
                     }
                     style={styles.backgroundImage}
                     imageStyle={styles.image}
@@ -51,28 +94,40 @@ export default function Tvmovie({navigation,route}){
                 <View style={styles.sectionInfo}>
 
                     <View style={styles.info}>
-                        <Text style={styles.textInfo}>Filme</Text>
+                        {/*se for filme */}
+                        {dataTvMovie.media_type === "movie" && (
+                             <Text style={styles.textInfo}>Filme</Text>
+                        )}
+                        {/*se for série*/}
+                        {dataTvMovie.media_type === "tv" && (
+                             <Text style={styles.textInfo}>Série</Text>
+                        )}
+                       
                     </View>
 
                     <View style={[styles.info,{backgroundColor:'#272939',flexDirection:'row'}]}>
                         <Feather name="calendar" size={20} color="#fff" />
-                        <Text style={[styles.textInfo,{marginLeft:'5%'}]}>2024</Text>
+                        {/*renderiza o ano de lançamento*/}
+                        <Text style={[styles.textInfo,{marginLeft:'5%'}]}>
+                            {dataTvMovie.release_date? dataTvMovie.release_date.slice(0,4):" "}
+                            {dataTvMovie.first_air_date? dataTvMovie.first_air_date.slice(0, 4) : " "}
+                            </Text>
                     </View>
 
                     <View style={[styles.info,{backgroundColor:'#372D19',flexDirection:'row'}]}>
                         <AntDesign name="star" size={20} color="#FDC700" />
-                        <Text style={[styles.textInfo,{color:'#FDC700',marginLeft:'5%'}]}>8,5</Text>
+                        <Text style={[styles.textInfo,{color:'#FDC700',marginLeft:'5%'}]}>{parseFloat(dataTvMovie.vote_average).toFixed(2) }</Text>
                     </View>
                 </View>
 
                 {/*Titulo do filme ou serie*/}
                 <View style={styles.viewTitle}>
-                    <Text style={styles.title}>Homem Aranha</Text>
+                    <Text style={styles.title}>{dataTvMovie.title}{dataTvMovie.name}</Text>
                 </View>
 
                 {/*botão de adicionar aos intereses*/}
                 <View style={styles.viewButton}>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={()=> alert("adicionado com sucesso")}>
                         <Feather name="bookmark" size={25} color="black" />
                         <Text style={styles.textButton}>Adicionar aos interesses</Text>
                     </TouchableOpacity>
@@ -81,7 +136,7 @@ export default function Tvmovie({navigation,route}){
                 
                 {/*Sinopse */}
                 <View style={styles.viewSinopse}>
-                    <Text style={styles.textSinopse}>Peter Parker é um jovem estudioso que vive com seus tios, Ben e May, desde que seus pais faleceram. Peter tem dificuldade em se relacionar com seus colegas, por ser tímido e por eles o considerarem um nerd. Até que, em uma demonstração científica, um acidente inesperado faz com que uma aranha modificada geneticamente pique Peter. A partir de então seu corpo é quimicamente alterado pela picada da aranha</Text>
+                    <Text style={styles.textSinopse}>{dataTvMovie.overview}</Text>
                 </View>
 
             </ImageBackground>
@@ -92,19 +147,39 @@ export default function Tvmovie({navigation,route}){
                 <Text style={styles.TextSubTitlePlataforms}>Disponível em</Text>
             </View>
 
-            {/*plataformas disponiveis*/}
-            <View style={styles.plataforms}>
-
-                <View style={styles.card}>
-                    
-                    <View style={styles.sectionCard}>
-                        <Text style={{color:'#fff', fontSize:23}}>Texto de plataforma</Text>
-                        <Text style={{fontSize:18,color:'#808180', marginTop:'2%'}}>Plataforma</Text>
+            <FlatList 
+                data={streaming}
+                keyExtractor={(item) => item.id}
+                renderItem={({item})=> <RenderListStreaming plataform={item} />}
+            />
+            
+            {/*componente de loading que fica girando até carregar as informações */}
+            {loading &&(
+                <>
+                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                        <ActivityIndicator size={"large"} color={"#4F39F6"}/>
                     </View>
-                </View>                  
-                
+                </>
+            )}
 
-            </View>
+            {/*caso não tenha dados a respoeito das plataformas*/}
+            {notFound &&(
+                <>
+                    <View style={styles.plataforms}>
+
+                        <TouchableOpacity style={styles.card} onPress={()=> openLink(plataform.web_url)}>
+                            
+                            <View style={styles.sectionCard}>
+                                <Text style={{color:'#fff', fontSize:23}}>Sem dados de plataformas para esse filme/série😑</Text>
+                                
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </>
+                
+            )}
+
+           <View style={{marginTop:"20%"}}></View>         
 
        </ScrollView>
     )
@@ -138,7 +213,7 @@ const styles = StyleSheet.create({
     subtitle:{
         flexDirection:'row',
         alignItems:'center',
-        marginTop:'5%',
+        marginTop:'25%',
         width:'90%',
         alignSelf:'center'       
 
@@ -218,7 +293,8 @@ const styles = StyleSheet.create({
     },
     textSinopse:{
         color:'#ffffffb6',
-        fontSize:15
+        fontSize:15,
+        fontWeight:'500'
     }
 
 })

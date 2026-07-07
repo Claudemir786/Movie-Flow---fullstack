@@ -91,12 +91,14 @@ export class WhatchMode{
         const plataformStreaming = await result.json();
 
         //faz um array com apenas os nomes da plataformas de streaming
-        const list = plataformStreaming.map(item => {return item.name})
+        let list = plataformStreaming.map(item => {return {name:item.name,web_url:item.web_url,seasons:item.seasons}})
+        //remove duplicatas no lista
+        const listStreaming = list.filter((item, index) => {
+            return index === list.findIndex(other => other.name === item.name);
+        });
+    
 
-        //verifica se veio dados repetidos e os remove
-        const unicList = [...new Set(list)]
-        //se nada estiver repetido retorna a lista(list) original
-        if(unicList === " ") return list
+        return listStreaming
 
         return unicList;
     } catch (error) {
