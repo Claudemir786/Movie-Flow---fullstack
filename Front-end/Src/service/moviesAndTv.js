@@ -57,7 +57,7 @@ export async function SearchStreaming(dataTvMovie){
     try {
         let result;
       //se for filme  
-      if(dataTvMovie.title){
+      if(dataTvMovie.media_type === "movie"){
         result = await fetch(`${URL}plataform?name=movie&id=${dataTvMovie.id}`, options("GET"))
         
       //se for serie  

@@ -18,6 +18,7 @@ const watchMode = new WhatchMode();
 //rotas de usuário
 route.post("/api/login", user.login)
 route.post("/api/register/user", user.create)
+route.post("/api/addMovieTv", user.movieTv)
 
 //rotas das outras APIS
 //rota de teste de conexão com a API

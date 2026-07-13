@@ -48,3 +48,36 @@ export async function userLogin(email,password){
         return false
     }
 }
+
+//adiciona o filme 
+export async function addMovie(id,id_user,backdrop_path,media_type,release_date,vote_average,title,overview) {
+    try {
+
+        const [result] = await POOL.query(`INSERT INTO USER_MOVIE(id,userId,backdrop_path,media_type,release_date,vote_average,title,overview)
+                                           VALUES(?,?,?,?,?,?,?,?)`, [id,id_user,backdrop_path,media_type,release_date,vote_average,title,overview]);
+        if(result.affectedRows === 0)throw new Error("Erro ao adicionar informações de filme no banco de dados")
+        
+        return true
+
+        
+    } catch (error) {
+        console.error("falha ao conectar no banco de dados e adicionar o filme: ", error)
+        return false
+    }
+}
+
+//adiciona a série
+export async function addTv(id,id_user,backdrop_path,media_type,first_air_date,vote_average,name,overview){
+    try {
+        const [result] = await POOL.query(`INSERT INTO USER_TV(id,userId,backdrop_path,media_type,first_air_date,vote_average,name,overview)
+                                           VALUES(?,?,?,?,?,?,?,?)`, [id,id_user,backdrop_path,media_type,first_air_date,vote_average,name,overview]);
+        if(result.affectedRows === 0) throw new Error("Erro ao adicionar informações de série no banco de dados")
+        
+        return true;    
+
+        
+    } catch (error) {
+        console.error("Falha ao conectar ao banco de dados e adicionar a série: ", error)
+        return false
+    }
+}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Text, StyleSheet,View, ScrollView, TextInput, ImageBackground, TouchableOpacity, FlatList } from "react-native";
+import { Text, StyleSheet,View, ScrollView, TextInput, ImageBackground, TouchableOpacity, FlatList, ActivityIndicator} from "react-native";
 import { SearchFilmsTv, SearchMovieTv, Trending } from "../service/moviesAndTv.js";
 
 
@@ -9,16 +9,21 @@ export default function Home({navigation}){
     const [titleMovieTv,setTitleMovieTv] = useState("")
     const [searchMovieTv,setSerchMovieTv] = useState([])
     const [searchActive,setSearchActive] = useState(false)
+    const [loading,setLoading] = useState(false)
 
     //traz todos os filmes e series que estão em alta
     async function handleTrending(){
-        try {            
+        try {
+            //renderiza o icône de carregamento       
+            setLoading(true)     
             const result = await Trending()
 
             if(result){
                 
                 setTrending(result)
                 //console.log("dados retornaram: ", result)
+                //cancela o incone de carregamento
+                setLoading(false)
 
             }else{
                 console.log("dados não retornaram: ", result)
@@ -103,7 +108,16 @@ export default function Home({navigation}){
             </View>
 
 
-            <View style={styles.body}>              
+            <View style={styles.body}> 
+
+        {/*componente de loading que fica girando até carregar as informações */}
+                {loading &&(
+                    <>
+                        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                            <ActivityIndicator size={"large"} color={"#4F39F6"}/>
+                        </View>
+                    </>
+                )}
 
             {/*card*/}
             {!searchActive &&(

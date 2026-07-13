@@ -1,4 +1,4 @@
-import { userCreate, userLogin } from "../repositories/userRepositories.js";
+import { addMovie, addTv, userCreate, userLogin } from "../repositories/userRepositories.js";
 import { messageError, messageSuccess } from "../util/message.js";
 
 
@@ -53,5 +53,40 @@ export class User{
         console.error("Erro ao verificar se o usário existe para o login: ", error.message)
         return messageError(res,400,"falha ao verificar login")
     }
+    }
+
+    async movieTv(req,res){
+        try{
+            //console.log("cheguei aqui: ", req.body)
+            //verifica se veio algo no corpo da requisição
+            if(!req.body)return messageError(res,400,"o body da requisição nãoi foi enviado");
+
+            //se for série
+            if(req.body.media_type === "tv"){
+               const{id,id_user,backdrop_path,media_type,first_air_date,vote_average,name,overview} = req.body;
+                if(!id,!id_user,!backdrop_path,!media_type,!first_air_date,!vote_average,!name,!overview) return messageError(res,401,"dados enviados incorretamente");
+
+                const result = await addTv(id,id_user,backdrop_path,media_type,first_air_date,vote_average,name,overview)
+                if(!result)return messageError(res,401,"Falha ao adicionar serie no banco de dados")
+                 
+                return messageSuccess(res,201,"Série adicionada com sucesso");
+
+            //se for filme    
+            }else if(req.body.media_type === "movie"){
+                const{id,id_user,backdrop_path,media_type,release_date,vote_average,title,overview}=req.body;
+                if(!id,!id_user,!backdrop_path,!media_type,!release_date,!vote_average, !title, !overview) return messageError(res,401,"dados enviados incorretamente")
+                    
+                const result = await addMovie(id,id_user,backdrop_path,media_type,release_date,vote_average,title,overview)  
+
+                 if(!result)return messageError(res,401,"Falha ao adicionar serie no banco de dados")
+                
+                return messageSuccess(res,201,"Filme adicionado com sucesso");
+
+            }
+
+        }catch(error){
+            console.error("Erro ao adicionar filme ou serie: ", error.message)
+            return messageError(res,400,"falha ao salvar dados");
+        }
     }
 }
