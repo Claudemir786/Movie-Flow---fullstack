@@ -1,4 +1,4 @@
-import { addMovie, addTv, userCreate, userLogin } from "../repositories/userRepositories.js";
+import { addMovie, addTv, userCreate, userInterests, userLogin } from "../repositories/userRepositories.js";
 import { messageError, messageSuccess } from "../util/message.js";
 
 
@@ -87,6 +87,20 @@ export class User{
         }catch(error){
             console.error("Erro ao adicionar filme ou serie: ", error.message)
             return messageError(res,400,"falha ao salvar dados");
+        }
+    }
+    //manda os ids de séries e filmes que estão armazenadas no banco de dados referente ao usuário
+    async getInterests(req,res){
+        try {
+         
+            const result = await userInterests(1);
+            if(!result)throw new Error("os dados não retornaram corretamente do banco de dados");
+
+            return res.status(200).json({success:true,ids:result});
+            
+        } catch (error) {
+            console.error("Erro ao buscar dados de filmes e séries do usuário: ", error.message)
+            return messageError(res,400,"falha ao buscar dados");
         }
     }
 }

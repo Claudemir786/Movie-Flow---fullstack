@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Text, View, ActivityIndicator, StyleSheet, ScrollView, ImageBackground, TouchableOpacity, Linking, FlatList } from "react-native";
-import { SearchStreaming } from "../service/moviesAndTv.js";
+import { addMovieTv, SearchStreaming, userInterests } from "../service/moviesAndTv.js";
 import Feather from '@expo/vector-icons/Feather';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
@@ -13,13 +13,38 @@ export default function Tvmovie({navigation,route}){
     const[streaming,setStreaming] = useState([])
     const[notFound,setNotFound] = useState(false)
     const[loading,setLoading] = useState(true)
+    const[added,setAdded] = useState(false);
+    const [idsMovieTv,setIdsMovieTv] = useState([]);
 
     useEffect(()=>{
         const{tvMovie} = route.params
-        console.log("dados enviados: ", tvMovie)        
-        handleStreaming(tvMovie)       
+        //console.log("dados enviados: ", tvMovie)        
+        handleStreaming(tvMovie);  
+         //buscas os dados do usuário
+        getMyinterests(tvMovie);   
        
     },[])
+   
+
+    async function getMyinterests(tvmovie) {
+        try {
+            const result = await userInterests();
+            //console.log(result);            
+            if(result){                
+                setIdsMovieTv(result);   
+                 if(result.includes(tvmovie.id)){
+                    setAdded(true);
+                 }            
+               
+            }else{
+                console.log("falha ao carregar ids de filmes e séries do usuário");
+            }
+            
+        } catch (error) {
+            console.log("falha ao buscar dados de filmes e séries do usuário")
+        }
+        
+    }
 
     async function handleStreaming(tvMovie){        
         try {
@@ -35,6 +60,7 @@ export default function Tvmovie({navigation,route}){
                     setNotFound(true)
                     
                 }
+                 
             }
         } catch (error){
             console.error("falha ao carregar dados do filme ou série")
@@ -53,6 +79,30 @@ async function openLink(url) {
         alert("não foi possivel abrir o link para a plataforma")
     }
 }
+
+async function add(){
+    try {        
+        //id,id_user,backdrop_path,media_type,release_date,vote_average,title,overview
+        const result = await addMovieTv(dataTvMovie);
+        //console.log("dados que retornaram na pagina: ", result);
+
+        if(result){
+            alert("adicionado com sucesso");
+            setAdded(true);
+
+        }else{
+            alert("falha ao adicionar aos interesses");
+        }
+
+
+    } catch (error) {
+        console.error("falha ao adicionar aos interesses")
+    }
+    
+}
+    
+
+  
 
 //componente que renderiza os opções de streaming
 const RenderListStreaming =({plataform})=>{
@@ -75,9 +125,8 @@ const RenderListStreaming =({plataform})=>{
     )
 
 }
-    
 
-  
+
     return(
        <ScrollView style={styles.container}>
             
@@ -126,13 +175,32 @@ const RenderListStreaming =({plataform})=>{
                 </View>
 
                 {/*botão de adicionar aos intereses*/}
-                <View style={styles.viewButton}>
-                    <TouchableOpacity style={styles.button} onPress={()=> alert("adicionado com sucesso")}>
-                        <Feather name="bookmark" size={25} color="black" />
-                        <Text style={styles.textButton}>Adicionar aos interesses</Text>
-                    </TouchableOpacity>
+                {/*se ele não estiver adicionado aos interesses*/ }
+                {!added &&(
+                    <>
+                        <View style={styles.viewButton}>
+                            <TouchableOpacity style={styles.button} onPress={()=>add()}>
+                                <Feather name="bookmark" size={25} color="black" />
+                                <Text style={styles.textButton}>Adicionar aos interesses</Text>
+                            </TouchableOpacity>
 
-                </View>            
+                        </View>
+                    </>
+                )}
+
+                {/*se ja estiver adicionado */}
+                {added &&(
+                     <>
+                        <View style={styles.viewButton}>
+                            <TouchableOpacity style={[styles.button,{backgroundColor:'#413f3fb7'}]}>
+                                <Feather name="bookmark" size={25} color="#6d6a6a" />
+                                <Text style={[styles.textButton,{color:"#6d6a6a"}]}>Adicionado</Text>
+                            </TouchableOpacity>
+
+                        </View>
+                    </>
+                )}
+                        
                 
                 {/*Sinopse */}
                 <View style={styles.viewSinopse}>

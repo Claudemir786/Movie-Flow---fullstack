@@ -80,4 +80,21 @@ export async function addTv(id,id_user,backdrop_path,media_type,first_air_date,v
         console.error("Falha ao conectar ao banco de dados e adicionar a série: ", error)
         return false
     }
+
+}
+
+export async function userInterests(id) {
+    try {
+        const [result] = await POOL.query(`SELECT id FROM USER_MOVIE WHERE userId = ?
+                                            UNION
+                                            SELECT id FROM USER_TV WHERE userId = ?`, [id,id]);
+        
+        if(result.length === 0)throw new Error("Banco não retornou os dados corretamente");
+
+        return result.map(item =>item.id);
+        
+    } catch (error) {
+        console.error("Falha ao conectar com o banco de dados e retornar dados de filmes e séries do usuário", error);
+        return false;
+    }
 }

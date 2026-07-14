@@ -6,6 +6,7 @@ import { WhatchMode } from '../services/whatchMode.js';
 
 
 
+
 const route = Router();
 //teste de rota
 route.get("/", (req,res)=>{res.send("Conexão funcionando corretamente")})
@@ -19,6 +20,7 @@ const watchMode = new WhatchMode();
 route.post("/api/login", user.login)
 route.post("/api/register/user", user.create)
 route.post("/api/addMovieTv", user.movieTv)
+route.get("/api/userInterests", user.getInterests);
 
 //rotas das outras APIS
 //rota de teste de conexão com a API
