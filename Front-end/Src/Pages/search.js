@@ -42,14 +42,14 @@ export default function Search({ navigation }) {
     );
   };
 
-  function movieCategory(name) {
-    console.log("categoria filme: ", name);
-    navigation.navigate("ListCategory", { category: name, type: "movie" });
+  function movieCategory(id) {
+    console.log("categoria filme: ", id);
+    navigation.navigate("ListCategory", { category: id, type: "movie" });
   }
 
-  function serieCategory(name) {
-    console.log("categoria série: ", name);
-    navigation.navigate("ListCategory", { category: name, type: "serie" });
+  function serieCategory(id) {
+    console.log("categoria série: ", id);
+    navigation.navigate("ListCategory", { category: id, type: "tv" });
   }
 
   async function handleSearch() {
@@ -135,21 +135,21 @@ export default function Search({ navigation }) {
                         >
                         <TouchableOpacity
                             style={styles.buttonCategoryMovie}
-                            onPress={() => movieCategory("acao")}
+                            onPress={() => movieCategory(28)}
                         >
                             <Text style={styles.textButton}>Ação</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                             style={styles.buttonCategoryMovie}
-                            onPress={() => movieCategory("comedia")}
+                            onPress={() => movieCategory(35)}
                         >
                             <Text style={styles.textButton}>Comédia</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                             style={styles.buttonCategoryMovie}
-                            onPress={() => movieCategory("terror")}
+                            onPress={() => movieCategory(27)}
                         >
                             <Text style={styles.textButton}>Terror</Text>
                         </TouchableOpacity>
@@ -164,14 +164,14 @@ export default function Search({ navigation }) {
                         >
                         <TouchableOpacity
                             style={styles.buttonCategoryMovie}
-                            onPress={() => movieCategory("romance")}
+                            onPress={() => movieCategory(10749)}
                         >
                             <Text style={styles.textButton}>Romance</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                             style={styles.buttonCategoryMovie}
-                            onPress={() => movieCategory("ficcao cientifica")}
+                            onPress={() => movieCategory(878)}
                         >
                             <Text style={styles.textButton}>Ficção Científica</Text>
                         </TouchableOpacity>
@@ -196,23 +196,23 @@ export default function Search({ navigation }) {
                         >
                             <TouchableOpacity
                             style={styles.buttonCategorySerie}
-                            onPress={() => serieCategory("acao")}
+                            onPress={() => serieCategory(10759)}
                             >
                             <Text style={styles.textButton}>Ação</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
                             style={styles.buttonCategorySerie}
-                            onPress={() => serieCategory("comedia")}
+                            onPress={() => serieCategory(35)}
                             >
                             <Text style={styles.textButton}>Comédia</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
                             style={styles.buttonCategorySerie}
-                            onPress={() => serieCategory("terror")}
+                            onPress={() => serieCategory(16)}
                             >
-                            <Text style={styles.textButton}>Terror</Text>
+                            <Text style={styles.textButton}>Animação</Text>
                             </TouchableOpacity>
                         </View>
                         <View
@@ -225,16 +225,16 @@ export default function Search({ navigation }) {
                         >
                             <TouchableOpacity
                             style={styles.buttonCategorySerie}
-                            onPress={() => serieCategory("romance")}
+                            onPress={() => serieCategory(18)}
                             >
-                            <Text style={styles.textButton}>Romance</Text>
+                            <Text style={styles.textButton}>Drama</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
                             style={styles.buttonCategorySerie}
-                            onPress={() => serieCategory("ficcao cientifica")}
+                            onPress={() => serieCategory(10765)}
                             >
-                            <Text style={styles.textButton}>Ficção Científica</Text>
+                            <Text style={styles.textButton}>Sci-fi e Fantasia</Text>
                             </TouchableOpacity>
                         </View>
 
@@ -248,14 +248,14 @@ export default function Search({ navigation }) {
                         >
                             <TouchableOpacity
                             style={styles.buttonCategorySerie}
-                            onPress={() => serieCategory("reality")}
+                            onPress={() => serieCategory(10764)}
                             >
                             <Text style={styles.textButton}>Reality</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
                             style={styles.buttonCategorySerie}
-                            onPress={() => serieCategory("kids")}
+                            onPress={() => serieCategory(10762)}
                             >
                             <Text style={styles.textButton}>Kids</Text>
                             </TouchableOpacity>

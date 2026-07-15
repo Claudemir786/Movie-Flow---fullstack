@@ -27,6 +27,7 @@ route.get("/api/userInterests", user.getInterests);
 route.get("/api/test", tmdb.testConnection)
 route.get("/api/search", tmdb.Search)
 route.get("/api/trending", tmdb.Trending)
+route.get("/api/category", tmdb.GetCategory)
 
 
 //rotas watchmode

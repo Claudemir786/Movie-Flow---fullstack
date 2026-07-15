@@ -22,7 +22,7 @@ export class WhatchMode{
 
     async findPlataform(req,res){
         try{
-            //busca o id da serie ou filme
+        
             const type = req.query.name;
             const id = req.query.id;
             //se não vier o paramêtro

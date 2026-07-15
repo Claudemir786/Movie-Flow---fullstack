@@ -12,6 +12,7 @@ import AccountDetails from './Src/Pages/accountDetails';
 import AccountSecurity from './Src/Pages/accountSecurity';
 import HelpCenter from './Src/Pages/helpCenter';
 import Tvmovie from './Src/Pages/tvMovie';
+import ListCategory from './Src/Pages/listCategory';
 
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);

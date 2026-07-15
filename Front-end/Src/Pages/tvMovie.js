@@ -144,11 +144,11 @@ const RenderListStreaming =({plataform})=>{
 
                     <View style={styles.info}>
                         {/*se for filme */}
-                        {dataTvMovie.media_type === "movie" && (
+                        {dataTvMovie.title && (
                              <Text style={styles.textInfo}>Filme</Text>
                         )}
                         {/*se for série*/}
-                        {dataTvMovie.media_type === "tv" && (
+                        {dataTvMovie.name && (
                              <Text style={styles.textInfo}>Série</Text>
                         )}
                        

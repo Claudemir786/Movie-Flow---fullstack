@@ -57,7 +57,7 @@ export async function SearchStreaming(dataTvMovie){
     try {
         let result;
       //se for filme  
-      if(dataTvMovie.media_type === "movie"){
+      if(dataTvMovie.title){
         result = await fetch(`${URL}plataform?name=movie&id=${dataTvMovie.id}`, options("GET"))
         
       //se for serie  
@@ -82,8 +82,8 @@ export async function addMovieTv(dataTvMovie){
         let movie;
          let tv;
         // filtra ecria o json de filme
-        if(dataTvMovie.media_type === "movie"){
-            movie ={"id":dataTvMovie.id,"id_user":1,"backdrop_path":dataTvMovie.backdrop_path, "media_type":dataTvMovie.media_type,
+        if(dataTvMovie.title){
+            movie ={"id":dataTvMovie.id,"id_user":1,"backdrop_path":dataTvMovie.backdrop_path, "media_type":"movie",
                                         "release_date":dataTvMovie.release_date, "vote_average":dataTvMovie.vote_average,
                                         "title":dataTvMovie.title, "overview":dataTvMovie.overview} 
                                        
@@ -94,9 +94,9 @@ export async function addMovieTv(dataTvMovie){
             return res;
 
          //filtra e cria o json de série   
-        }else if(dataTvMovie.media_type ==="tv"){
+        }else if(dataTvMovie.name){
             //id,id_user,backdrop_path,media_type,first_air_date,vote_average,name,overview
-            tv = {"id":dataTvMovie.id,"id_user":1,"backdrop_path":dataTvMovie.backdrop_path, "media_type":dataTvMovie.media_type,
+            tv = {"id":dataTvMovie.id,"id_user":1,"backdrop_path":dataTvMovie.backdrop_path, "media_type":"tv",
                                         "first_air_date":dataTvMovie.first_air_date, "vote_average":dataTvMovie.vote_average,
                                         "name":dataTvMovie.name, "overview":dataTvMovie.overview}
 
@@ -127,5 +127,20 @@ export async function userInterests(){
     } catch (error) {
         console.error("não foi possivel buscar dados de filmes e séries do usuário")
         return false;
+    }
+}
+
+export async function listCategorySelected(category,type) {
+    try {
+
+        const result = await fetch(`${URL}category?type=${type}&category=${category}`, options("GET"));
+        if(!result.ok)throw new Error("Falha ao reber dados da API");
+        const res = await result.json();
+        return res.list.results;
+        
+    } catch (error) {
+        console.error("não foi possivel buscar dados da categoria selecionada")
+        return false;
+    
     }
 }

@@ -77,8 +77,29 @@ export class Tmdb{
 
             
         } catch (error) {
-            console.error("falha na buscar oa mais populares: ", error)
+            console.error("falha na buscar os filmes e séries em alta: ", error)
             return messageError(res,401,"não foram encontrados informações para essa busca")
+        }
+    }
+    async GetCategory(req,res){
+        try {
+            const type = req.query.type;
+            const category = req.query.category;
+           // console.log(req.query)
+            //se não vier o paramêtro
+            if(!type || !category)throw new Error("parametro não foi enviado corretamente") 
+            //busca os dados de categoria utilizando os dados recebidos por parametro;
+            const result = await fetch(`${defaultEndpoint}discover/${type}?with_genres=${category}${languageRegion}`, options("GET"));
+            if(!result.ok)throw new Error("Dados não retornaram corretamente ao buscar lista da categoria selecionada da API externa TMDB")
+            
+            const list = await result.json();
+            return res.status(200).json({success:true,list:list});
+                
+
+            
+        } catch (error) {
+            console.error("falha ao buscar dados da categoria escolhida: ", error);
+            return messageError(res,401,"falha ao buscar dados da categoria escolhida")
         }
     }
 }
