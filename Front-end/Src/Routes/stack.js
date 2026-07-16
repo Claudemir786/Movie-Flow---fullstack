@@ -12,6 +12,7 @@ import AccountDetails from "../Pages/accountDetails";
 import AccountSecurity from "../Pages/accountSecurity";
 import HelpCenter from "../Pages/helpCenter";
 import Tvmovie from "../Pages/tvMovie";
+import Interests from "../Pages/interests";
 
 
 const STACK = createNativeStackNavigator()
@@ -33,6 +34,7 @@ export default function Stack(){
             <STACK.Screen name="AccountSecurity" component={AccountSecurity}/>
             <STACK.Screen name="HelpCenter" component={HelpCenter}/>
             <STACK.Screen name="TvMovie" component={Tvmovie}/>
+            <STACK.Screen name="Interests" component={Interests}/>
 
             
             

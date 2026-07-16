@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
-import { Text, View, ActivityIndicator, StyleSheet, ScrollView, ImageBackground, TouchableOpacity, Linking, FlatList } from "react-native";
+import { Text, View, ActivityIndicator, StyleSheet, ImageBackground, TouchableOpacity, Linking, FlatList } from "react-native";
 import { addMovieTv, SearchStreaming, userInterests } from "../service/moviesAndTv.js";
 import Feather from '@expo/vector-icons/Feather';
 import AntDesign from '@expo/vector-icons/AntDesign';
-
-
-
 
 
 export default function Tvmovie({navigation,route}){
@@ -128,7 +125,7 @@ const RenderListStreaming =({plataform})=>{
 
 
     return(
-       <ScrollView style={styles.container}>
+       <View style={styles.container}>
             
             {/*Imagem de fundo*/}
             <ImageBackground 
@@ -249,7 +246,7 @@ const RenderListStreaming =({plataform})=>{
 
            <View style={{marginTop:"20%"}}></View>         
 
-       </ScrollView>
+       </View>
     )
 }
 
@@ -267,7 +264,7 @@ const styles = StyleSheet.create({
         
     },
     image:{        
-        opacity:'10%',
+        opacity:0.1,
         justifyContent:'center',
         alignItems:'center'        
     },
@@ -302,7 +299,7 @@ const styles = StyleSheet.create({
     info:{
         backgroundColor:'#4F39F6',
         justifyContent:'center',
-        height:'80%',
+        height:40,
         width:'20%',
         borderRadius:15,
         marginLeft:'5%',
@@ -339,7 +336,7 @@ const styles = StyleSheet.create({
         borderRadius:15,
         justifyContent:'center',
         alignItems:'center',
-        height:'200%'
+        height:60
 
     },
     viewButton:{

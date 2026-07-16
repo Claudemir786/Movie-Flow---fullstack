@@ -1,7 +1,7 @@
 
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { ScrollView } from 'react-native-web';
+
 import ButtonD from '../Components/ButtonDefault';
 
 

@@ -1,11 +1,65 @@
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity, ImageBackground } from "react-native"
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity, ImageBackground, ActivityIndicator, FlatList } from "react-native"
 import Feather from '@expo/vector-icons/Feather';
+import { useEffect, useState } from "react";
+import { allUserIntrests } from "../service/moviesAndTv";
 
 
-export default function Interests(){
+export default function Interests({navigation}){
+    const [dataMoviesTv,setDataMoviesTv] = useState([]);
+    const [loading,setLoading] = useState(true);
+
+    useEffect(()=>{
+        getMyMoviesTv();
+    },[])
+
+   
+    //função que busca os dados;
+    async function getMyMoviesTv(params){
+        try {
+
+            const result = await allUserIntrests();
+            //console.log("daddos que retornaram: ", result);
+
+            if(result){
+                setDataMoviesTv(result);
+                setLoading(false)
+            }else{
+                console.error("dados não chegaram na pagina");
+            }
+            
+        } catch (error) {
+            console.error("não foi possivel retornar os dados corretamente");
+        }
+        
+    }
+
+    //componente que retorna a lista de filmes e séries
+        const LIST = ({movieTv})=>{
+    
+            return(
+                <TouchableOpacity onPress={()=>navigation.navigate("TvMovie",{tvMovie:movieTv})}>
+                    <ImageBackground
+                        source={{
+                            uri:`https://image.tmdb.org/t/p/w500${movieTv.backdrop_path}`
+                        }}
+                        style={styles.card}
+                        imageStyle={styles.image}
+                    >
+                    {movieTv.title &&(
+                         <Text style={styles.textCard}>{movieTv.title}</Text>
+                    )}    
+                    {movieTv.name &&(
+                        <Text style={styles.textCard}>{movieTv.name}</Text>
+                    )}
+    
+                    </ImageBackground>
+    
+    
+                </TouchableOpacity>
+            )}
 
     return(
-       <ScrollView style={styles.container}>
+       <View style={styles.container}>
 
         {/*cabecalho*/}
         <View style={styles.header}>
@@ -18,22 +72,28 @@ export default function Interests(){
 
         {/* lista filmes e séries de interesse*/}
         <View style={styles.body}>
-            {/*apenas um teste de como vai aparecer*/}
-            <TouchableOpacity>
-                <ImageBackground
-                    source={require('../Assets/i554287.jpeg')}
-                    style={styles.card}
-                    imageStyle={styles.image}
-                >
-                <Text style={styles.textCard}>titulo</Text>
 
-                </ImageBackground>
-        
-        
-            </TouchableOpacity>
+
+        {loading &&(
+            <>
+                 {/*icone que fica girando enquanto aguarda os dados*/} 
+                <View style={{marginTop:"20%"}}>
+                    <ActivityIndicator color={"#4F39F6"} size={"large"}/>
+                </View>
+            </>
+        )}
+
+        {/*renderiza os dados da tela dinamicamente*/}
+        <FlatList
+            data={dataMoviesTv}
+            keyExtractor={(item)=>item.id}
+            renderItem={({item})=> <LIST movieTv={item} />}
+        />
+       
+
         </View>
 
-       </ScrollView>
+       </View>
     )
 }
 
@@ -54,7 +114,8 @@ const styles = StyleSheet.create({
     body:{
         marginTop:'10%',
         width:'90%',
-        alignSelf:'center'
+        alignSelf:'center',
+        marginBottom:"32%"       
 
     },
     title:{
@@ -73,7 +134,7 @@ const styles = StyleSheet.create({
     },
     image:{
         borderRadius:15,
-        opacity:'40%'       
+        opacity:0.4       
         
     },
     textCard:{

@@ -1,4 +1,4 @@
-import { addMovie, addTv, userCreate, userInterests, userLogin } from "../repositories/userRepositories.js";
+import { addMovie, addTv, interests, userCreate, userInterestsId, userLogin } from "../repositories/userRepositories.js";
 import { messageError, messageSuccess } from "../util/message.js";
 
 
@@ -55,6 +55,7 @@ export class User{
     }
     }
 
+    //adiciona ao favoritos (interesses)
     async movieTv(req,res){
         try{
             //console.log("cheguei aqui: ", req.body)
@@ -89,18 +90,35 @@ export class User{
             return messageError(res,400,"falha ao salvar dados");
         }
     }
+
     //manda os ids de séries e filmes que estão armazenadas no banco de dados referente ao usuário
     async getInterests(req,res){
         try {
          
-            const result = await userInterests(1);
+            const result = await userInterestsId(1);
             if(!result)throw new Error("os dados não retornaram corretamente do banco de dados");
 
             return res.status(200).json({success:true,ids:result});
             
         } catch (error) {
-            console.error("Erro ao buscar dados de filmes e séries do usuário: ", error.message)
+            console.error("Erro ao buscar ids de filmes e séries do usuário: ", error.message)
             return messageError(res,400,"falha ao buscar dados");
+        }
+    }
+
+    async getInterestsAll(req,res){
+        try{
+
+            const result = await interests(1);
+
+            if(!result)throw new Error("os dados não retornaram corretamente do banco de dados");
+
+            return res.status(200).json({success:true,movieTv:result});
+
+        }catch(error){
+            console.error("Erro ao buscar dados completos de filmes e séries do usuário: ", error.message)
+            return messageError(res,400,"falha ao buscar dados");
+        
         }
     }
 }

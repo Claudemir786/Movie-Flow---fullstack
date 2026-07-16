@@ -88,7 +88,7 @@ export default function Home({navigation}){
     }
 
     return(
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
 
             {/*Titulo de boas vindas */}
             <View style={styles.viewTitle}>
@@ -156,9 +156,9 @@ export default function Home({navigation}){
 
             
             </View>
+           
 
-
-        </ScrollView>
+        </View>
     )
 }
 
@@ -200,7 +200,8 @@ const styles = StyleSheet.create({
     body:{
         width:'90%',
         alignSelf:'center',
-        marginTop:'5%',     
+        marginTop:'5%',  
+        marginBottom:'80%'  
        
 
     },
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
     },
     image:{
         borderRadius:15,
-        opacity:'40%'       
+        opacity:0.4      
         
     },
     textCard:{

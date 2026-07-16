@@ -67,13 +67,14 @@ export default function ListCategory({navigation, route}){
     }
 
     return(
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
             {/*Body */}
             <View style={styles.body}>
 
                 <View style={styles.header}>
                     <Text style={styles.title}>Resultados encontrados</Text>
                 </View>
+                 
                {/*componente de loading que fica girando até carregar as informações */}
                 {loading &&(
                     <>
@@ -87,14 +88,18 @@ export default function ListCategory({navigation, route}){
                         data={dataCategory}
                         keyExtractor={(item)=>item.id}
                         renderItem={({item})=> <LIST movieTv={item}/>}
-                    
+                     contentContainerStyle={{
+        paddingBottom:"30%",
+    }}
                 />
-
+               
             </View>
+
+           
             
 
 
-        </ScrollView>
+        </View>
     )
 }
 
@@ -129,7 +134,7 @@ const styles = StyleSheet.create({
     },
     image:{
         borderRadius:15,
-        opacity:'40%'       
+        opacity:0.4      
         
     },
     textCard:{

@@ -1,6 +1,6 @@
 
 //URL padrão 
-const URL = "http://localhost:3000/api/";
+const URL = "http://192.168.3.43:3000/api/";
 
 //utilizado para retornar o metodo e headers da requisição
 const options = (method, body)=>{
@@ -117,6 +117,7 @@ export async function addMovieTv(dataTvMovie){
 
 }
 
+//busca os filmes e séries do usuário na api e recebe e invia os ids 
 export async function userInterests(){
     try {
         const result =  await fetch(`${URL}userInterests`,options("GET"));
@@ -125,7 +126,7 @@ export async function userInterests(){
         return res.ids;    
         
     } catch (error) {
-        console.error("não foi possivel buscar dados de filmes e séries do usuário")
+        console.error("não foi possivel buscar ids de filmes e séries do usuário")
         return false;
     }
 }
@@ -142,5 +143,23 @@ export async function listCategorySelected(category,type) {
         console.error("não foi possivel buscar dados da categoria selecionada")
         return false;
     
+    }
+}
+
+//busca os dados completos de filmes e séries adicionados como insteresses 
+export async function allUserIntrests(){
+    try {
+        
+        const result = await fetch(`${URL}interests`, options("GET"));
+
+        if(!result.ok)throw new Error("falha ao receber dados corretamente da API");
+
+        const res = await result.json();
+        return res.movieTv;
+        
+    } catch (error) {
+        console.error("não foi possivel retornar os dados completos de filmes e séries do usuário");
+        return false;
+
     }
 }

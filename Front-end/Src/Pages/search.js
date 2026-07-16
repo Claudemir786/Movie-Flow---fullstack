@@ -75,7 +75,7 @@ export default function Search({ navigation }) {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
         <View style={styles.body}>
              {/*Cabeçalho com a barra de pesquisa */}
                 <View style={styles.header}>
@@ -108,12 +108,16 @@ export default function Search({ navigation }) {
                     <Text style={styles.title}>Resultados da pesquisa</Text>
 
                     <FlatList
+                      
                         data={search}
                         keyExtractor={(item) => item.id}
                         renderItem={({ item }) => <LIST movieTv={item} />}
+                         
                     />
+                     <Text style={styles.title}>Resultados da pesquisa</Text>
                     </>
-                )}
+                    
+                ) }
                 
 
                 {!resultSearch && (
@@ -265,10 +269,11 @@ export default function Search({ navigation }) {
                     
                     </>
                 )}
-                <View style={{marginBottom:'10%'}}></View>
+                
         </View>
-     
-    </ScrollView>
+        
+          
+    </View>
   );
 }
 
@@ -276,6 +281,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#020618",
     flex: 1,
+    
     
   },
   header: {
@@ -344,7 +350,7 @@ const styles = StyleSheet.create({
   },
   image: {
     borderRadius: 15,
-    opacity: "40%",
+    opacity: 0.4,
     
     
   },
@@ -354,6 +360,9 @@ const styles = StyleSheet.create({
   body:{
     width:'90%',
     alignSelf:'center',
+    
+    
+    
      
   }
 });
