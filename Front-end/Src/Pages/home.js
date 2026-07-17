@@ -88,7 +88,7 @@ export default function Home({navigation}){
     }
 
     return(
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
 
             {/*Titulo de boas vindas */}
             <View style={styles.viewTitle}>
@@ -131,7 +131,8 @@ export default function Home({navigation}){
                     data={trending}
                     keyExtractor={(item)=>item.id}
                     renderItem={({item})=> <LIST movieTv={item}/>}
-                
+                    scrollEnabled={false}
+
                 />
                 </>
              
@@ -158,7 +159,7 @@ export default function Home({navigation}){
             </View>
            
 
-        </View>
+        </ScrollView>
     )
 }
 
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
         width:'90%',
         alignSelf:'center',
         marginTop:'5%',  
-        marginBottom:'80%'  
+        marginBottom:'10%'  
        
 
     },

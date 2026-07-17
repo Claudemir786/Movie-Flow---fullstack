@@ -29,7 +29,7 @@ export class WhatchMode{
             if(!type || !id)throw new Error("parametro não foi enviado corretamente") 
                 
             
-            if(type == "tv"){
+            if(type == "tv"){                
                 //chama a função que ira buscar as plataformas da serie em questão
                 const plataform = await findTvMovie(id,'tmdb_tv_id');
                 //caso o retorno seja false

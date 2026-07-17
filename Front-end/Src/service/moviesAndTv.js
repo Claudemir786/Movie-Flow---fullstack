@@ -55,6 +55,7 @@ export async function SearchMovieTv(title){
 
 export async function SearchStreaming(dataTvMovie){   
     try {
+       // console.log("dados da função que envia para API: ", dataTvMovie);
         let result;
       //se for filme  
       if(dataTvMovie.title){
@@ -94,11 +95,11 @@ export async function addMovieTv(dataTvMovie){
             return res;
 
          //filtra e cria o json de série   
-        }else if(dataTvMovie.name){
+        }else if(dataTvMovie.name || dataTvMovie.tv_name){
             //id,id_user,backdrop_path,media_type,first_air_date,vote_average,name,overview
             tv = {"id":dataTvMovie.id,"id_user":1,"backdrop_path":dataTvMovie.backdrop_path, "media_type":"tv",
                                         "first_air_date":dataTvMovie.first_air_date, "vote_average":dataTvMovie.vote_average,
-                                        "name":dataTvMovie.name, "overview":dataTvMovie.overview}
+                                        "name":dataTvMovie.name || dataTvMovie.tv_name, "overview":dataTvMovie.overview}
 
             const result = await fetch(`${URL}addMovieTv`,options("POST",tv))
 
@@ -117,7 +118,7 @@ export async function addMovieTv(dataTvMovie){
 
 }
 
-//busca os filmes e séries do usuário na api e recebe e invia os ids 
+//busca os filmes e séries do usuário na api e recebe e envia os ids 
 export async function userInterests(){
     try {
         const result =  await fetch(`${URL}userInterests`,options("GET"));
@@ -155,11 +156,36 @@ export async function allUserIntrests(){
         if(!result.ok)throw new Error("falha ao receber dados corretamente da API");
 
         const res = await result.json();
-        return res.movieTv;
+        return {movie:res.movie, tv:res.tv}
         
     } catch (error) {
         console.error("não foi possivel retornar os dados completos de filmes e séries do usuário");
         return false;
 
+    }
+}
+
+export async function removeMovieTv(data) {
+    try {
+        let result;
+        //console.log(data)
+        //se for filme
+        if(data.title){
+            result = await fetch(`${URL}removeInterests`,options("DELETE",{id:data.id, type:"movie"}));
+
+        //se for tv    
+        }else if(data.name || data.tv_name){
+
+             result = await fetch(`${URL}removeInterests`,options("DELETE",{id:data.id, type:"tv"}));
+
+        }
+
+        if(!result.ok)throw new Error("a remoção fracassou");
+
+        return true;
+        
+    } catch (error) {
+        console.error("não posivel remover série ou filme dos interesses");
+        return false;
     }
 }

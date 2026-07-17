@@ -75,7 +75,7 @@ export default function Search({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
         <View style={styles.body}>
              {/*Cabeçalho com a barra de pesquisa */}
                 <View style={styles.header}>
@@ -111,7 +111,10 @@ export default function Search({ navigation }) {
                       
                         data={search}
                         keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => <LIST movieTv={item} />}
+                        renderItem={({ item }) => <LIST movieTv={item} 
+                        scrollEnabled={false}
+
+                        />}
                          
                     />
                      <Text style={styles.title}>Resultados da pesquisa</Text>
@@ -273,7 +276,7 @@ export default function Search({ navigation }) {
         </View>
         
           
-    </View>
+    </ScrollView>
   );
 }
 
@@ -304,7 +307,7 @@ const styles = StyleSheet.create({
     color: "#7B837E",
     fontSize: 20,
     marginLeft: "3%",
-    width: "100%",
+    width: "80%",
     padding: 10,
     borderRadius: 15,
     borderColor: "transparent",

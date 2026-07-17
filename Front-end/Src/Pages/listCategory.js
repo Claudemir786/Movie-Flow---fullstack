@@ -67,7 +67,7 @@ export default function ListCategory({navigation, route}){
     }
 
     return(
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             {/*Body */}
             <View style={styles.body}>
 
@@ -88,9 +88,11 @@ export default function ListCategory({navigation, route}){
                         data={dataCategory}
                         keyExtractor={(item)=>item.id}
                         renderItem={({item})=> <LIST movieTv={item}/>}
+                        scrollEnabled={false}
+
                      contentContainerStyle={{
-        paddingBottom:"30%",
-    }}
+                        paddingBottom:"10%",
+                    }}
                 />
                
             </View>
@@ -99,7 +101,7 @@ export default function ListCategory({navigation, route}){
             
 
 
-        </View>
+        </ScrollView>
     )
 }
 

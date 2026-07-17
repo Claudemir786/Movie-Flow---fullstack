@@ -69,7 +69,7 @@ export async function addMovie(id,id_user,backdrop_path,media_type,release_date,
 //adiciona a série
 export async function addTv(id,id_user,backdrop_path,media_type,first_air_date,vote_average,name,overview){
     try {
-        const [result] = await POOL.query(`INSERT INTO USER_TV(id,userId,backdrop_path,media_type,first_air_date,vote_average,name,overview)
+        const [result] = await POOL.query(`INSERT INTO USER_TV(id,userId,backdrop_path,media_type,first_air_date,vote_average,tv_name,overview)
                                            VALUES(?,?,?,?,?,?,?,?)`, [id,id_user,backdrop_path,media_type,first_air_date,vote_average,name,overview]);
         if(result.affectedRows === 0) throw new Error("Erro ao adicionar informações de série no banco de dados")
         
@@ -103,16 +103,41 @@ export async function userInterestsId(id) {
 export async function interests(id){
     try {
         const [result] = await POOL.query(`SElECT * FROM USER_MOVIE WHERE userId = ?
-                                            UNION
-                                            SELECT * FROM USER_TV WHERE userId = ?`,[id,id]);
+                                           `,[id]);
          
         if(result.length === 0)throw new Error("Banco não retornou os dados corretamente");
 
-        return result;                                    
+        const [rows] = await POOL.query(`SELECT * FROM USER_TV WHERE userId = ?`,[id]);
+                                           
+        if(rows.length === 0)throw new Error("Banco não retornou os dados corretamente");    
 
+        return {tv:rows,movie:result}
         
     } catch (error) {
         console.error("Falha ao retornar filmes e séries do usuário: ", error);
+        return false
+    }
+}
+
+export async function remove(id,userId,type){
+    try {
+       
+
+        if(type === "tv"){
+        
+            const [result] = await POOL.query(`DELETE FROM USER_TV WHERE id = ? AND userId = ? `,[id,userId]);
+
+            if(result.affectedRows === 0 )throw new Error("O DELETE na tabela USER_TV falhou no banco de dados")
+            return true    
+
+        }else{
+            const [result] = await POOL.query(`DELETE FROM USER_MOVIE WHERE id = ? AND userId = ?`,[id,userId]);
+             if(result.affectedRows === 0 )throw new Error("O DELETE na tabela USER_MOVIE falhou no banco de dados")
+            return true    
+        }
+
+    } catch (error) {
+         console.error("Falha ao retornar filmes e séries do usuário: ", error);
         return false
     }
 }

@@ -1,4 +1,4 @@
-import { addMovie, addTv, interests, userCreate, userInterestsId, userLogin } from "../repositories/userRepositories.js";
+import { addMovie, addTv, interests, remove, userCreate, userInterestsId, userLogin } from "../repositories/userRepositories.js";
 import { messageError, messageSuccess } from "../util/message.js";
 
 
@@ -112,13 +112,32 @@ export class User{
             const result = await interests(1);
 
             if(!result)throw new Error("os dados não retornaram corretamente do banco de dados");
-
-            return res.status(200).json({success:true,movieTv:result});
+            
+            return res.status(200).json({success:true,movie:result.movie,tv:result.tv});
 
         }catch(error){
             console.error("Erro ao buscar dados completos de filmes e séries do usuário: ", error.message)
             return messageError(res,400,"falha ao buscar dados");
         
+        }
+    }
+
+    async RemoveInterests(req,res){
+        try {
+            //console.log("teste de chegada: ",req.body)
+            const {id, type} = req.body;
+            const idUser = 1;
+            if(!id,!type)return messageError(res,401,"Dados enviados incorretamente");
+            
+            const result = await remove(id,idUser,type);
+           
+            if(!result)return messageError(res,401,"não foi possivel remover com sucesso");
+
+            return messageSuccess(res,200,"removido com sucesso");
+            
+        } catch (error) {
+            console.error("Erro ao remover filme ou série do usuário: ", error.message);
+            return messageError(res,400,"falha ao remover filme ou série dos interesses do usuário");
         }
     }
 }

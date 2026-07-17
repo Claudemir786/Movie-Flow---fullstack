@@ -5,7 +5,8 @@ import { allUserIntrests } from "../service/moviesAndTv";
 
 
 export default function Interests({navigation}){
-    const [dataMoviesTv,setDataMoviesTv] = useState([]);
+    const [dataMovies,setDataMovies] = useState([]);
+    const [dataTv,setDataTv] = useState([]);
     const [loading,setLoading] = useState(true);
 
     useEffect(()=>{
@@ -14,14 +15,15 @@ export default function Interests({navigation}){
 
    
     //função que busca os dados;
-    async function getMyMoviesTv(params){
+    async function getMyMoviesTv(){
         try {
 
             const result = await allUserIntrests();
-            //console.log("daddos que retornaram: ", result);
+            //console.log("dados que retornaram: ", result);
 
             if(result){
-                setDataMoviesTv(result);
+                setDataMovies(result.movie);
+                setDataTv(result.tv);
                 setLoading(false)
             }else{
                 console.error("dados não chegaram na pagina");
@@ -48,8 +50,8 @@ export default function Interests({navigation}){
                     {movieTv.title &&(
                          <Text style={styles.textCard}>{movieTv.title}</Text>
                     )}    
-                    {movieTv.name &&(
-                        <Text style={styles.textCard}>{movieTv.name}</Text>
+                    {movieTv.tv_name &&(
+                        <Text style={styles.textCard}>{movieTv.tv_name}</Text>
                     )}
     
                     </ImageBackground>
@@ -59,7 +61,7 @@ export default function Interests({navigation}){
             )}
 
     return(
-       <View style={styles.container}>
+       <ScrollView style={styles.container}>
 
         {/*cabecalho*/}
         <View style={styles.header}>
@@ -85,15 +87,22 @@ export default function Interests({navigation}){
 
         {/*renderiza os dados da tela dinamicamente*/}
         <FlatList
-            data={dataMoviesTv}
+            data={dataMovies}
             keyExtractor={(item)=>item.id}
             renderItem={({item})=> <LIST movieTv={item} />}
+             scrollEnabled={false}
+        />
+        <FlatList
+            data={dataTv}
+            keyExtractor={(item)=>item.id}
+            renderItem={({item})=> <LIST movieTv={item} />}
+             scrollEnabled={false}
         />
        
 
         </View>
 
-       </View>
+       </ScrollView>
     )
 }
 

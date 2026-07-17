@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Text, View, ActivityIndicator, StyleSheet, ImageBackground, TouchableOpacity, Linking, FlatList } from "react-native";
-import { addMovieTv, SearchStreaming, userInterests } from "../service/moviesAndTv.js";
+import { Text, View, ActivityIndicator, StyleSheet, ImageBackground, TouchableOpacity, Linking, FlatList,ScrollView } from "react-native";
+import { addMovieTv, removeMovieTv, SearchStreaming, userInterests } from "../service/moviesAndTv.js";
 import Feather from '@expo/vector-icons/Feather';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
@@ -77,6 +77,7 @@ async function openLink(url) {
     }
 }
 
+//adiciona filme ou série
 async function add(){
     try {        
         //id,id_user,backdrop_path,media_type,release_date,vote_average,title,overview
@@ -98,7 +99,21 @@ async function add(){
     
 }
     
+//remove dos dos favoritos(interesse)
+async function toRemove() {
+    try {
+       
+        const result = await removeMovieTv(dataTvMovie);
 
+        if(result){
+            alert("Removido com sucesso")
+            setAdded(false);
+        }
+
+    } catch (error) {
+        console.error("falaha ao remover dos interesses");
+    }
+}
   
 
 //componente que renderiza os opções de streaming
@@ -125,7 +140,7 @@ const RenderListStreaming =({plataform})=>{
 
 
     return(
-       <View style={styles.container}>
+       <ScrollView style={styles.container}>
             
             {/*Imagem de fundo*/}
             <ImageBackground 
@@ -145,7 +160,7 @@ const RenderListStreaming =({plataform})=>{
                              <Text style={styles.textInfo}>Filme</Text>
                         )}
                         {/*se for série*/}
-                        {dataTvMovie.name && (
+                        {!dataTvMovie.title && (
                              <Text style={styles.textInfo}>Série</Text>
                         )}
                        
@@ -168,7 +183,7 @@ const RenderListStreaming =({plataform})=>{
 
                 {/*Titulo do filme ou serie*/}
                 <View style={styles.viewTitle}>
-                    <Text style={styles.title}>{dataTvMovie.title}{dataTvMovie.name}</Text>
+                    <Text style={styles.title}>{dataTvMovie.title}{dataTvMovie.name}{dataTvMovie.tv_name}</Text>
                 </View>
 
                 {/*botão de adicionar aos intereses*/}
@@ -185,13 +200,13 @@ const RenderListStreaming =({plataform})=>{
                     </>
                 )}
 
-                {/*se ja estiver adicionado */}
+                {/*se ja estiver adicionado e com a opção de remover*/}
                 {added &&(
                      <>
                         <View style={styles.viewButton}>
-                            <TouchableOpacity style={[styles.button,{backgroundColor:'#413f3fb7'}]}>
+                            <TouchableOpacity style={[styles.button,{backgroundColor:'#413f3fb7'}]} onPress={()=> toRemove()}>
                                 <Feather name="bookmark" size={25} color="#6d6a6a" />
-                                <Text style={[styles.textButton,{color:"#6d6a6a"}]}>Adicionado</Text>
+                                <Text style={[styles.textButton,{color:"#6d6a6a"}]}>Remover dos favoritos</Text>
                             </TouchableOpacity>
 
                         </View>
@@ -215,7 +230,10 @@ const RenderListStreaming =({plataform})=>{
             <FlatList 
                 data={streaming}
                 keyExtractor={(item) => item.id}
-                renderItem={({item})=> <RenderListStreaming plataform={item} />}
+                renderItem={({item})=> <RenderListStreaming plataform={item}
+                scrollEnabled={false}
+
+                />}
             />
             
             {/*componente de loading que fica girando até carregar as informações */}
@@ -246,7 +264,7 @@ const RenderListStreaming =({plataform})=>{
 
            <View style={{marginTop:"20%"}}></View>         
 
-       </View>
+       </ScrollView>
     )
 }
 
