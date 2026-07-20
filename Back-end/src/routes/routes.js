@@ -3,6 +3,7 @@ import {Router} from 'express'
 import { User } from '../controller/userControler.js';
 import { Tmdb } from '../services/tmdb.js';
 import { WhatchMode } from '../services/whatchMode.js';
+import { Auth } from '../middleware/auth.js';
 
 
 
@@ -23,10 +24,13 @@ route.post("/api/addMovieTv", user.movieTv)
 route.get("/api/userInterests", user.getInterests);
 route.get("/api/interests", user.getInterestsAll);
 route.delete("/api/removeInterests", user.RemoveInterests);
+route.put("/api/change/nameEmail", user.updateNameEmail);
+route.put("/api/change/password", user.updatePassword);
+route.delete("/api/delete/user", user.delete);
 
 //rotas das outras APIS
 //rota de teste de conexão com a API
-route.get("/api/test", tmdb.testConnection)
+route.get("/api/test", Auth, tmdb.testConnection)
 route.get("/api/search", tmdb.Search)
 route.get("/api/trending", tmdb.Trending)
 route.get("/api/category", tmdb.GetCategory)

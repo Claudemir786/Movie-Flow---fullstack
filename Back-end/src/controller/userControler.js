@@ -1,4 +1,4 @@
-import { addMovie, addTv, interests, remove, userCreate, userInterestsId, userLogin } from "../repositories/userRepositories.js";
+import { addMovie, addTv, changeNameEmail, changePassword, deleteAccount, interests, remove, userCreate, userInterestsId, userLogin } from "../repositories/userRepositories.js";
 import { messageError, messageSuccess } from "../util/message.js";
 
 
@@ -46,7 +46,7 @@ export class User{
        
        if(!result)return messageError(res,400,"falha ao efetuar o login corretamente")
 
-       return messageSuccess(res,200, result) 
+       return res.status(200).json({success:true, token:result});
 
         
     } catch (error) {
@@ -111,7 +111,7 @@ export class User{
 
             const result = await interests(1);
 
-            if(!result)throw new Error("os dados não retornaram corretamente do banco de dados");
+            if(!result)return messageError(res,401,"os dados não retornaram corretamente do banco de dados");
             
             return res.status(200).json({success:true,movie:result.movie,tv:result.tv});
 
@@ -139,5 +139,68 @@ export class User{
             console.error("Erro ao remover filme ou série do usuário: ", error.message);
             return messageError(res,400,"falha ao remover filme ou série dos interesses do usuário");
         }
+    }
+
+    async updateNameEmail(req,res){
+        try {
+            //dados não enviados ao corpo da requisição
+            if(!req.body)return messageError(res,401,"corpo da requisição não foi enviado");
+
+            const {name,email} = req.body;
+
+            const id = 1;
+            
+            if(!name, !email) return messageError(res,401,"dados não foram enviados corretamente");
+
+            const result = await changeNameEmail(name,email,id);
+
+            if(!result)return messageError(res,401,"não possível alterar nome e email");
+
+            return messageSuccess(res,200,"nome e email alterados com sucesso");
+
+        } catch (error) {
+            console.error("Error ao alterar nome e email: ", error.message);
+            return messageError(res,400,"não foi possivel alterar nome e email")
+        }
+    }
+    async updatePassword(req,res){
+        try {
+             //dados não enviados ao corpo da requisição
+            if(!req.body)return messageError(res,401,"corpo da requisição não foi enviado");
+
+            const {password} = req.body;
+            const id = 1;
+            if(!password)return messageError(res,401,"dados não foram enviados corretamente");
+
+            const result = await changePassword(password,id);
+
+            if(!result)return messageError(res,401,"não foi possível alterar senha");
+
+            return messageSuccess(res,200,"senha alterada com sucesso");
+
+            
+        } catch (error) {
+            console.error("Erro ao alterar senha: ", error.message)
+            return messageError(res,400, "não possível alterar senha")
+            
+        }
+    }
+
+    async delete(req,res){
+
+       try {
+         const id = 3;
+
+        const result = await deleteAccount(id);
+
+        if(!result)return messageError(res,401,"não foi possivel excluir usuário");
+
+        return messageSuccess(res,200,"usuário excluído com sucesso");
+        
+       } catch (error) {
+
+         console.error("Erro ao excluir usuário: ", error.message);
+         return messageError(res,400,"falha ao excluir usuário");
+       }
     }
 }

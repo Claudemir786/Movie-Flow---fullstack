@@ -1,5 +1,6 @@
 import pool from "../database/db.js";
 import { comparePassword, hashPassword } from "../util/hashPassword.js";
+import { createToken } from "../util/tokenJWT.js";
 
 
 const POOL = pool;
@@ -41,7 +42,8 @@ export async function userLogin(email,password){
         const verificPass = await comparePassword(password, user.user_password)
         if(!verificPass)throw new Error("falha, senhas não condizem")       
 
-        return user.id
+        const token = createToken(user);
+        return token;
 
     } catch (error) {
         console.error("falha ao conectar no banco de dados e verificar o login de usuário: ", error)
@@ -139,6 +141,58 @@ export async function remove(id,userId,type){
     } catch (error) {
          console.error("Falha ao retornar filmes e séries do usuário: ", error);
         return false
+    }
+}
+
+//altera o email e nome do usuário
+export async function changeNameEmail(name,email,id){
+    try {
+        const [result] = await POOL.query(`UPDATE USERS SET name = ?, email = ? WHERE id = ?`, [name,email,id])  
+
+        if(result.affectedRows === 0 )throw new Error("UPDATE de email e nome no banco de dados falhou");
+
+        return true;
+        
+    } catch (error) {
+        console.error("falha ao alterar email e nome: ", error);
+        return false;
+    }
+}
+
+
+//altera a senha do usuário
+export async function changePassword(password,id){
+    try {
+        const newPassword = await hashPassword(password);
+
+        const [result] = await POOL.query(`UPDATE USERS SET user_password = ? WHERE id = ?`,[newPassword,id])
+
+        if(result.affectedRows === 0)throw new Error("Falha no banco ao alterar a senha do usuário")
+         
+        return true;    
+
+        
+    } catch (error) {
+        console.error("falha ao alterar senha: ", error);
+        return false;
+    }
+
+}
+
+//exclui a conta do usário;
+export async function deleteAccount(id){
+    try {
+
+        const [result] = await POOL.query(`DELETE FROM USERS WHERE id = ?`, [id]);
+
+        if(result.affectedRows === 0)throw new Error("Falha no banco ao excluir o usuário");
+
+        return true;
+
+        
+    } catch (error) {
+        console.error("falha ao deletar conta do usário");
+        return false;
     }
 }
 
