@@ -1,20 +1,30 @@
+import { getNameEmailId, getToken } from "./secureStore";
 
 //URL padrão 
 const URL = "http://192.168.3.43:3000/api/";
 
+
+//cabeçalho ja com o token incluso(Bearer token)
+export async function authHeader(){
+    const token = await getToken("token")
+    return {"Content-Type":"application/json",
+            "Authorization":`Bearer ${token}`
+    }
+}
+
 //utilizado para retornar o metodo e headers da requisição
-const options = (method, body)=>{
+const options = async (method, body)=>{
     if(body){
         return{
         method:method,
-        headers:{'Content-Type' :'application/json'},
+        headers:await authHeader(),
         body:JSON.stringify(body)
         }
 
     }else{
         return{
         method:method,
-        headers:{'Content-Type' :'application/json'}
+        headers:await authHeader()
         }
     }
 }
@@ -23,7 +33,7 @@ const options = (method, body)=>{
 export async function Trending(){
     try{
 
-        const result = await fetch(`${URL}trending`, options("GET"))
+        const result = await fetch(`${URL}trending`, await options("GET"))
 
         //se o resultado falhar e os dados não voltarem
         if(!result.ok)throw new Error("Requisição falhou, dados chegaram incorretamente")
@@ -41,7 +51,7 @@ export async function Trending(){
 export async function SearchMovieTv(title){
     try {
         console.log(title)
-        const result = await fetch(`${URL}search?search=${title}`, options("GET"))
+        const result = await fetch(`${URL}search?search=${title}`, await options("GET"))
         if(!result.ok)throw new Error("Requisição falhou, dados chegaram incorretamente")
          
         const moviesAndFilms = await result.json();
@@ -59,11 +69,11 @@ export async function SearchStreaming(dataTvMovie){
         let result;
       //se for filme  
       if(dataTvMovie.title){
-        result = await fetch(`${URL}plataform?name=movie&id=${dataTvMovie.id}`, options("GET"))
+        result = await fetch(`${URL}plataform?name=movie&id=${dataTvMovie.id}`, await options("GET"))
         
       //se for serie  
       }else{
-        result = await fetch(`${URL}plataform?name=tv&id=${dataTvMovie.id}`, options("GET"))
+        result = await fetch(`${URL}plataform?name=tv&id=${dataTvMovie.id}`, await options("GET"))
 
       }
       if(!result.ok)throw new Error("Falha ao retornar dados da API")
@@ -81,14 +91,18 @@ export async function SearchStreaming(dataTvMovie){
 export async function addMovieTv(dataTvMovie){
     try {
         let movie;
-         let tv;
+        let tv;
+        const userString = await getNameEmailId("user") 
+        const user = JSON.parse(userString);
+        console.log("o id é esse: ",user.id)
+
         // filtra ecria o json de filme
         if(dataTvMovie.title){
-            movie ={"id":dataTvMovie.id,"id_user":1,"backdrop_path":dataTvMovie.backdrop_path, "media_type":"movie",
+            movie ={"id":dataTvMovie.id,"id_user":user.id,"backdrop_path":dataTvMovie.backdrop_path, "media_type":"movie",
                                         "release_date":dataTvMovie.release_date, "vote_average":dataTvMovie.vote_average,
                                         "title":dataTvMovie.title, "overview":dataTvMovie.overview} 
                                        
-            const result = await fetch(`${URL}addMovieTv`,options("POST",movie))
+            const result = await fetch(`${URL}addMovieTv`, await options("POST",movie))
 
             if(!result.ok)throw new Error("falha na requisição dados não retornaram corretamente");
             const res = await result.json();
@@ -97,11 +111,11 @@ export async function addMovieTv(dataTvMovie){
          //filtra e cria o json de série   
         }else if(dataTvMovie.name || dataTvMovie.tv_name){
             //id,id_user,backdrop_path,media_type,first_air_date,vote_average,name,overview
-            tv = {"id":dataTvMovie.id,"id_user":1,"backdrop_path":dataTvMovie.backdrop_path, "media_type":"tv",
+            tv = {"id":dataTvMovie.id,"id_user": user.id,"backdrop_path":dataTvMovie.backdrop_path, "media_type":"tv",
                                         "first_air_date":dataTvMovie.first_air_date, "vote_average":dataTvMovie.vote_average,
                                         "name":dataTvMovie.name || dataTvMovie.tv_name, "overview":dataTvMovie.overview}
 
-            const result = await fetch(`${URL}addMovieTv`,options("POST",tv))
+            const result = await fetch(`${URL}addMovieTv`, await options("POST",tv))
 
             if(!result.ok)throw new Error("falha na requisição dados não retornaram corretamente");
             const res = await result.json();
@@ -112,7 +126,7 @@ export async function addMovieTv(dataTvMovie){
       
         
     } catch (error) {
-        console.error("não foi posssivel adicionar aos interesses");
+        console.error("não foi posssivel adicionar aos interesses: ", error);
         return false
     }
 
@@ -121,7 +135,7 @@ export async function addMovieTv(dataTvMovie){
 //busca os filmes e séries do usuário na api e recebe e envia os ids 
 export async function userInterests(){
     try {
-        const result =  await fetch(`${URL}userInterests`,options("GET"));
+        const result =  await fetch(`${URL}userInterests`, await options("GET"));
         if(!result.ok)throw new Error("falha ao receber dado da API")
         const res = await result.json();
         return res.ids;    
@@ -135,7 +149,7 @@ export async function userInterests(){
 export async function listCategorySelected(category,type) {
     try {
 
-        const result = await fetch(`${URL}category?type=${type}&category=${category}`, options("GET"));
+        const result = await fetch(`${URL}category?type=${type}&category=${category}`, await options("GET"));
         if(!result.ok)throw new Error("Falha ao reber dados da API");
         const res = await result.json();
         return res.list.results;
@@ -151,7 +165,7 @@ export async function listCategorySelected(category,type) {
 export async function allUserIntrests(){
     try {
         
-        const result = await fetch(`${URL}interests`, options("GET"));
+        const result = await fetch(`${URL}interests`, await options("GET"));
 
         if(!result.ok)throw new Error("falha ao receber dados corretamente da API");
 
@@ -171,12 +185,12 @@ export async function removeMovieTv(data) {
         //console.log(data)
         //se for filme
         if(data.title){
-            result = await fetch(`${URL}removeInterests`,options("DELETE",{id:data.id, type:"movie"}));
+            result = await fetch(`${URL}removeInterests`, await options("DELETE",{id:data.id, type:"movie"}));
 
         //se for tv    
         }else if(data.name || data.tv_name){
 
-             result = await fetch(`${URL}removeInterests`,options("DELETE",{id:data.id, type:"tv"}));
+             result = await fetch(`${URL}removeInterests`,await options("DELETE",{id:data.id, type:"tv"}));
 
         }
 
@@ -185,7 +199,7 @@ export async function removeMovieTv(data) {
         return true;
         
     } catch (error) {
-        console.error("não posivel remover série ou filme dos interesses");
+        console.error("não posivel remover série ou filme dos interesses: ",error);
         return false;
     }
 }

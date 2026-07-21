@@ -43,7 +43,7 @@ export async function userLogin(email,password){
         if(!verificPass)throw new Error("falha, senhas não condizem")       
 
         const token = createToken(user);
-        return token;
+        return [token, user.name, user.email,user.id];
 
     } catch (error) {
         console.error("falha ao conectar no banco de dados e verificar o login de usuário: ", error)

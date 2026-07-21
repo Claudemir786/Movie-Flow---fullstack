@@ -3,7 +3,10 @@ import Feather from '@expo/vector-icons/Feather';
 import InputD from "../Components/InputDefault";
 import ButtonD from "../Components/ButtonDefault";
 
-export default function AccountDetails({navigation}){
+
+
+export default function AccountDetails({navigation}){       
+   
 
     return(
         <ScrollView style={styles.container}>
@@ -18,10 +21,10 @@ export default function AccountDetails({navigation}){
 
             {/*Corpo*/}
             <View style={styles.body}>
-                <InputD label="Nome de exibição" placeholder="Visitante"/>
+                <InputD label="Nome de exibição" />
                 {/*usado apenas para gerar espaço entre os componentes */}
                 <View style={{marginTop:'5%'}}></View>
-                <InputD label="Endereço de E-mail" placeholder="Visitante@exemple.com"/>
+                <InputD label="Endereço de E-mail" />
                 
                 {/*usado apenas para gerar espaço entre os componentes */}
                 <View style={{marginTop:'5%'}}></View>

@@ -1,8 +1,40 @@
 import { Text,View,StyleSheet,TouchableOpacity } from "react-native"
 import Feather from '@expo/vector-icons/Feather';
-
+import { useState, useEffect } from "react";
+import { getNameEmailId, logout } from "../service/secureStore.js";
 
 export default function Profile({navigation}){
+
+    const [name,setName] = useState([]);
+    const [email,setEmail] = useState([]);
+
+    useEffect(()=>{
+        getNameEmail()
+    },[])   
+
+
+     async function getNameEmail() {
+            try {
+                //pega os dados do usuário armazenados no securestore
+                const nameString = await getNameEmailId("user");
+                const dataUser = JSON.parse(nameString)
+                setName(dataUser.name);
+                setEmail(dataUser.email);
+
+            } catch (error) {
+                console.error("falha ao pegar dados salvos do usuário")
+            }
+        }
+      async function handleLogout(){
+        try {
+            await logout()
+
+            navigation.navigate("FirstPage")
+            
+        } catch (error) {
+            console.error("falha ao fazer o logout");
+        }
+      }  
 
     return(
         <View style={styles.container}>
@@ -16,8 +48,8 @@ export default function Profile({navigation}){
 
                 {/*informações de nome e email de usuário*/}
                 <View style={styles.ifoUser}>
-                    <Text style={styles.nameUser}>Nome Usuário</Text>
-                    <Text style={styles.emailUser}>Email do usuário</Text>
+                    <Text style={styles.nameUser}>{name}</Text>
+                    <Text style={styles.emailUser}>{email}</Text>
                 </View>
             </View>
 

@@ -37,7 +37,7 @@ export class User{
     try {
 
        if(!req.body)return messageError(res,400,"o body da requisição nãoi foi enviado");
-
+       //console.log(req.body);
        const{email,password} = req.body;
 
        if(!email,!password)return messageError(res,400,"dados enviados incorretamente")
@@ -46,11 +46,11 @@ export class User{
        
        if(!result)return messageError(res,400,"falha ao efetuar o login corretamente")
 
-       return res.status(200).json({success:true, token:result});
+       return res.status(200).json({success:true, token:result[0],nome:result[1],email:result[2],id:result[3]});
 
         
     } catch (error) {
-        console.error("Erro ao verificar se o usário existe para o login: ", error.message)
+        console.error("Erro ao verificar se o usuário existe para o login: ", error.message)
         return messageError(res,400,"falha ao verificar login")
     }
     }
@@ -94,8 +94,8 @@ export class User{
     //manda os ids de séries e filmes que estão armazenadas no banco de dados referente ao usuário
     async getInterests(req,res){
         try {
-         
-            const result = await userInterestsId(1);
+            const id = req.user.id
+            const result = await userInterestsId(id);
             if(!result)throw new Error("os dados não retornaram corretamente do banco de dados");
 
             return res.status(200).json({success:true,ids:result});
@@ -108,8 +108,8 @@ export class User{
 
     async getInterestsAll(req,res){
         try{
-
-            const result = await interests(1);
+             const id = req.user.id
+            const result = await interests(id);
 
             if(!result)return messageError(res,401,"os dados não retornaram corretamente do banco de dados");
             
@@ -124,9 +124,9 @@ export class User{
 
     async RemoveInterests(req,res){
         try {
-            //console.log("teste de chegada: ",req.body)
+           // console.log("teste de chegada: ",req.body)
             const {id, type} = req.body;
-            const idUser = 1;
+            const idUser = req.user.id;
             if(!id,!type)return messageError(res,401,"Dados enviados incorretamente");
             
             const result = await remove(id,idUser,type);
@@ -148,7 +148,7 @@ export class User{
 
             const {name,email} = req.body;
 
-            const id = 1;
+            const id = req.user.id;
             
             if(!name, !email) return messageError(res,401,"dados não foram enviados corretamente");
 
@@ -169,7 +169,7 @@ export class User{
             if(!req.body)return messageError(res,401,"corpo da requisição não foi enviado");
 
             const {password} = req.body;
-            const id = 1;
+            const id = req.user.id;
             if(!password)return messageError(res,401,"dados não foram enviados corretamente");
 
             const result = await changePassword(password,id);
@@ -189,7 +189,7 @@ export class User{
     async delete(req,res){
 
        try {
-         const id = 3;
+         const id = req.user.id;
 
         const result = await deleteAccount(id);
 

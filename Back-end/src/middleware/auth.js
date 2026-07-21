@@ -6,7 +6,7 @@ import { verifyToken } from "../util/tokenJWT.js";
 
 export async function Auth(req,res,next){
     try {
-       
+       //console.log("dados do req na autenticação: ", req.body)
         //pega o cabeçalho da requisição
         const header = req.headers.authorization;
         if(!header)return messageError(res,401,"header da requisição não foi enviado");

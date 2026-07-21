@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Text, StyleSheet,View, ScrollView, TextInput, ImageBackground, TouchableOpacity, FlatList, ActivityIndicator} from "react-native";
 import { SearchFilmsTv, SearchMovieTv, Trending } from "../service/moviesAndTv.js";
+import { getNameEmailId } from "../service/secureStore.js";
 
 
 export default function Home({navigation}){
@@ -10,6 +11,19 @@ export default function Home({navigation}){
     const [searchMovieTv,setSerchMovieTv] = useState([])
     const [searchActive,setSearchActive] = useState(false)
     const [loading,setLoading] = useState(false)
+    const [name,setName] = useState([]);
+
+
+    async function getName() {
+        try {
+            //pega os dados do usuário armazenados no securestore
+            const nameString = await getNameEmailId("user");
+            const dataUser = JSON.parse(nameString)
+            setName(dataUser.name);
+        } catch (error) {
+            console.error("falha ao pegar dados salvos do usuário")
+        }
+    }
 
     //traz todos os filmes e series que estão em alta
     async function handleTrending(){
@@ -24,6 +38,7 @@ export default function Home({navigation}){
                 //console.log("dados retornaram: ", result)
                 //cancela o incone de carregamento
                 setLoading(false)
+               
 
             }else{
                 console.log("dados não retornaram: ", result)
@@ -56,8 +71,9 @@ export default function Home({navigation}){
     }
 
     //ja renderiza a tela chamando os dados 
-    useEffect(()=>{
+    useEffect(()=>{    
         handleTrending()
+        getName()
     },[]);
 
 
@@ -92,7 +108,7 @@ export default function Home({navigation}){
 
             {/*Titulo de boas vindas */}
             <View style={styles.viewTitle}>
-                <Text style={styles.title}>Olá Visitante! 👋</Text>
+                <Text style={styles.title}>Olá {name}👋</Text>
                 <Text style={styles.subTitle}>O que vamos assistir hoje?</Text>
             </View>
 

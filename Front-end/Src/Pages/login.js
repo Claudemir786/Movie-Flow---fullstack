@@ -3,6 +3,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import InputD from "../Components/InputDefault";
 import ButtonD from "../Components/ButtonDefault";
 import { useState } from "react";
+import { userLogin } from "../service/user";
 
 
 export default function Login({navigation}){
@@ -11,9 +12,20 @@ export default function Login({navigation}){
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
 
-    function handleLogin(){
-        console.log(`dados que foram recebidos ${email} ${password}`)
-        navigation.navigate("Tabs")
+   async function handleLogin(){
+       try {
+            const result = await userLogin(email,password)
+        
+            if(result){
+                navigation.navigate("Tabs")
+            }else{
+                alert("falha no login");
+            }
+        
+       } catch (error) {
+            console.error("falha ao realizar o login");
+       }
+       
     }
 
     
