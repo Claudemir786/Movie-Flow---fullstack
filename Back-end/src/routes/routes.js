@@ -22,9 +22,10 @@ route.post("/api/addMovieTv", Auth, user.movieTv)
 route.get("/api/userInterests",Auth, user.getInterests);
 route.get("/api/interests", Auth, user.getInterestsAll);
 route.delete("/api/removeInterests",Auth, user.RemoveInterests);
-route.put("/api/change/nameEmail",Auth, user.updateNameEmail);
+route.put("/api/change/nameEmail", Auth, user.updateNameEmail);
 route.put("/api/change/password",Auth, user.updatePassword);
-route.delete("/api/delete/user",Auth, user.delete);
+route.delete("/api/delete/user", Auth, user.delete);
+
 
 //rotas das outras APIS
 //rota de teste de conexão com a API

@@ -147,7 +147,27 @@ export async function remove(id,userId,type){
 //altera o email e nome do usuário
 export async function changeNameEmail(name,email,id){
     try {
-        const [result] = await POOL.query(`UPDATE USERS SET name = ?, email = ? WHERE id = ?`, [name,email,id])  
+
+        let result;
+       
+       console.log(`REPOSITORIES \n nome recebido: ${name} email recebido: ${email}`)
+
+        //validação de campos que foram erecebidos
+        //dependendo do que foi recebido a query muda
+         if(!name && email){
+            //console.log("só veio o email");
+
+           [result] = await POOL.query(`UPDATE USERS SET email = ? WHERE id = ?`, [email,id])
+
+         }else if(!email && name){
+           // console.log("só veio o nome");
+            [result] = await POOL.query(`UPDATE USERS SET name = ? WHERE id = ?`, [email,id])
+
+         }else if(email && name){
+            //console.log("veio os dois")
+            [result] = await POOL.query(`UPDATE USERS SET name = ?, email = ? WHERE id = ?`, [name,email,id])
+         }
+         
 
         if(result.affectedRows === 0 )throw new Error("UPDATE de email e nome no banco de dados falhou");
 
@@ -188,7 +208,6 @@ export async function deleteAccount(id){
         if(result.affectedRows === 0)throw new Error("Falha no banco ao excluir o usuário");
 
         return true;
-
         
     } catch (error) {
         console.error("falha ao deletar conta do usário");

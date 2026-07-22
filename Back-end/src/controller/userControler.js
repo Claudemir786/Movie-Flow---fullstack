@@ -148,9 +148,11 @@ export class User{
 
             const {name,email} = req.body;
 
+            console.log(`CONTROLLER \n nome recebido: ${name} email recebido: ${email}`)
+
             const id = req.user.id;
             
-            if(!name, !email) return messageError(res,401,"dados não foram enviados corretamente");
+            //if(!name, !email) return messageError(res,401,"dados não foram enviados corretamente");
 
             const result = await changeNameEmail(name,email,id);
 
@@ -189,6 +191,8 @@ export class User{
     async delete(req,res){
 
        try {
+        console.log("cheguei aqui");
+
          const id = req.user.id;
 
         const result = await deleteAccount(id);
@@ -203,4 +207,6 @@ export class User{
          return messageError(res,400,"falha ao excluir usuário");
        }
     }
+    
+    
 }

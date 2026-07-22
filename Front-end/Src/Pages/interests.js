@@ -1,6 +1,7 @@
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, ImageBackground, ActivityIndicator, FlatList } from "react-native"
+import {useFocusEffect} from "@react-navigation/native";
 import Feather from '@expo/vector-icons/Feather';
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { allUserIntrests } from "../service/moviesAndTv";
 
 
@@ -8,10 +9,13 @@ export default function Interests({navigation}){
     const [dataMovies,setDataMovies] = useState([]);
     const [dataTv,setDataTv] = useState([]);
     const [loading,setLoading] = useState(true);
-
-    useEffect(()=>{
-        getMyMoviesTv();
-    },[])
+  
+    //sempre recarrega os dados da pagina para manter sempre atualizado
+    useFocusEffect(
+        useCallback(()=>{
+            getMyMoviesTv();
+        },[])
+    )
 
    
     //função que busca os dados;
