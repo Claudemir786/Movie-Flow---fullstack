@@ -7,12 +7,14 @@ const MYSQL = mysql;
 
 const pool = MYSQL.createPool({
     host:'localhost',
-    port:'3306',
+    port:'3307',
     user:'root',
-    password:'',
+    password:'4723',
     database:'movieflow'
 
 }).promise();
+
+
 
 
 export default pool;

@@ -68,6 +68,9 @@ export async function alterEmailName(name,email){
         const result = await fetch(`${URL}change/nameEmail`, await options("PUT",{name:name, email:email}));
 
         if(!result.ok)throw new Error("dados de alteração não retornaram com sucesso")
+
+        const user = await result.json();
+        await saveNameEmailId(user.name,user.email);
         return true;
 
     } catch (error) {
@@ -80,14 +83,29 @@ export async function alterEmailName(name,email){
 export async function deleteAccount() {
     try {
 
-        const result = await fetch(`${URL}delete/user`, options("DELETE"));
+        const result = await fetch(`${URL}delete/user`, await options("DELETE"));
 
         if(!result.ok)throw new Error("dados não retornaram corretamente");
         
         return true;
         
     } catch (error) {
-        console.error("falha ao esxluir conta do usuário: ", error);
+        console.error("falha ao excluir conta do usuário: ", error);
+        return false;
+    }
+}
+
+export async function passUser(password){
+    try {
+        
+        const result = await fetch(`${URL}change/password`, await options("PUT",{password:password}))
+
+        if(!result.ok)throw new Error("a mudança de senha falhou");
+
+        return true;
+        
+    } catch (error) {
+        console.error("falha ao tentar alterar a senha de usuário");
         return false;
     }
 }

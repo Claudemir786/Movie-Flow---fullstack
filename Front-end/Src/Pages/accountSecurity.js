@@ -4,18 +4,34 @@ import { Switch } from "react-native";
 import { useState } from "react";
 import InputD from "../Components/InputDefault";
 import ButtonD from "../Components/ButtonDefault";
+import {passUser } from "../service/user";
+
 
 export default function AccountSecurity({navigation}){
 
     const [active,setActive] = useState(false)
     const [activeData, setActiveData] = useState(false)
-    const [alterPass, setAlterPass] = useState(false)
-    const [password,setPassword] = useState("")
+    const [alterPass, setAlterPass] = useState(false)  
     const [newPassword,setNewPassword] = useState("")
 
-    function handlePassword(){
-        alert("Senha alterada com sucesso")
-        setAlterPass(false)
+  async function handlePassword(){
+        try {
+            
+            const result = await passUser(newPassword)
+            
+            if(result){
+                console.log("senha alterada com sucesso");
+                alert("Senha alterada com sucesso")                
+                navigation.navigate("Tabs");               
+
+            }else{
+                console.error("a mudança de senha do usuário não foi concluida")
+            }
+
+        } catch (error) {
+            console.error("Falha ao alterar senha");
+        }
+        
     }
 
    
@@ -70,8 +86,7 @@ export default function AccountSecurity({navigation}){
             {/*tela de pop-pup quando clica em alterar senha */}
             <Modal visible={alterPass} transparent={true} animationType="fade">
                 <View style={styles.overlay}>
-                    <View style={styles.modal}>
-                        <InputD label="digite a senha atual" placeholder="*******" passaword={true} value={password} onChange={setPassword}/>            
+                    <View style={styles.modal}>                                   
                         <InputD label="digite a nova senha" placeholder="*******" passaword={true} value={newPassword} onChange={setNewPassword}/>
                         <ButtonD text="Enviar" onpress={()=>handlePassword()}/>                          
                     </View>

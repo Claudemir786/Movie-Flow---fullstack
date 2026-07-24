@@ -17,8 +17,9 @@ export async function logout() {
 }
 
 //salva nome e email
-export async function saveNameEmailId(name,email,id) {
-    const user = {name:name,email:email, id:id};
+export async function saveNameEmailId(name,email) {    
+  
+    const user = {name:name,email:email};
     await SecureStore.setItemAsync("user", JSON.stringify(user));
 }
 

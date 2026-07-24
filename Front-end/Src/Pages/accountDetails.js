@@ -2,9 +2,11 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Modal 
 import Feather from '@expo/vector-icons/Feather';
 import InputD from "../Components/InputDefault";
 import ButtonD from "../Components/ButtonDefault";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { alterEmailName, deleteAccount } from "../service/user";
-import { logout } from "../service/secureStore";
+import { getNameEmailId, logout } from "../service/secureStore";
+import { useFocusEffect } from "@react-navigation/native";
+
 
 
 
@@ -15,6 +17,25 @@ export default function AccountDetails({navigation}){
    const [correct, setCorrect] = useState(true);
    const [messageDeleteAccount, setMessageDeleteAccount] = useState(false);
    const [confirmDelete, setConfirmDelete] = useState(false);
+   const [displayName, setDisplayName] = useState("");
+
+   useFocusEffect(
+    useCallback(()=>{
+       getName();
+
+    },[])
+   )
+
+    async function getName() {
+        try {
+            //pega os dados do usuário armazenados no securestore
+            const nameString = await getNameEmailId();
+            const dataUser = JSON.parse(nameString)
+            setDisplayName(dataUser.name);
+        } catch (error) {
+            console.error("falha ao pegar dados salvos do usuário")
+        }
+    }
 
     //logica de campos vazios e campos preenchidos
     async function changeNameEmail(){
@@ -60,6 +81,8 @@ export default function AccountDetails({navigation}){
                 if(result){
 
                     console.log("dados alterados com sucesso")
+                    alert("dados alterados com sucesso");
+                    navigation.navigate("Tabs")
 
                 }else{
                     setCorrect(false);
@@ -87,7 +110,7 @@ export default function AccountDetails({navigation}){
 
     async function handleDeleteAccount(){
         try {
-           console.log("consirmado que o usuário deseja deletar");
+           console.log("confirmado que o usuário deseja deletar");
            
             const result = await deleteAccount();
 
@@ -119,6 +142,9 @@ export default function AccountDetails({navigation}){
                 
                 <View style={styles.user}>
                     <Feather name="user" size={70} color="#ffffff80" />
+                </View>
+                <View>
+                    <Text style={{color:"#fff", fontSize:15}}>{displayName}</Text>    
                 </View>                              
 
             </View>

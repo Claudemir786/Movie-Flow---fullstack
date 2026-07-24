@@ -161,7 +161,7 @@ export async function changeNameEmail(name,email,id){
 
          }else if(!email && name){
            // console.log("só veio o nome");
-            [result] = await POOL.query(`UPDATE USERS SET name = ? WHERE id = ?`, [email,id])
+            [result] = await POOL.query(`UPDATE USERS SET name = ? WHERE id = ?`, [name,id])
 
          }else if(email && name){
             //console.log("veio os dois")
@@ -171,7 +171,13 @@ export async function changeNameEmail(name,email,id){
 
         if(result.affectedRows === 0 )throw new Error("UPDATE de email e nome no banco de dados falhou");
 
-        return true;
+        const [row] = await POOL.query(`SELECT name, email FROM USERS WHERE id = ?`, [id]);
+
+        if(!row.length === 0)throw new Error("falha ao retornar os dados alterados")
+
+        const user = row[0];
+        return user;
+
         
     } catch (error) {
         console.error("falha ao alterar email e nome: ", error);

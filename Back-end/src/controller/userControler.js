@@ -62,22 +62,23 @@ export class User{
             //verifica se veio algo no corpo da requisição
             if(!req.body)return messageError(res,400,"o body da requisição nãoi foi enviado");
 
+            const idUser = req.user.id;
             //se for série
             if(req.body.media_type === "tv"){
-               const{id,id_user,backdrop_path,media_type,first_air_date,vote_average,name,overview} = req.body;
-                if(!id,!id_user,!backdrop_path,!media_type,!first_air_date,!vote_average,!name,!overview) return messageError(res,401,"dados enviados incorretamente");
+               const{id,backdrop_path,media_type,first_air_date,vote_average,name,overview} = req.body;
+                if(!id,!backdrop_path,!media_type,!first_air_date,!vote_average,!name,!overview) return messageError(res,401,"dados enviados incorretamente");
 
-                const result = await addTv(id,id_user,backdrop_path,media_type,first_air_date,vote_average,name,overview)
+                const result = await addTv(id,idUser,backdrop_path,media_type,first_air_date,vote_average,name,overview)
                 if(!result)return messageError(res,401,"Falha ao adicionar serie no banco de dados")
                  
                 return messageSuccess(res,201,"Série adicionada com sucesso");
 
             //se for filme    
             }else if(req.body.media_type === "movie"){
-                const{id,id_user,backdrop_path,media_type,release_date,vote_average,title,overview}=req.body;
-                if(!id,!id_user,!backdrop_path,!media_type,!release_date,!vote_average, !title, !overview) return messageError(res,401,"dados enviados incorretamente")
+                const{id,backdrop_path,media_type,release_date,vote_average,title,overview}=req.body;
+                if(!id,!backdrop_path,!media_type,!release_date,!vote_average, !title, !overview) return messageError(res,401,"dados enviados incorretamente")
                     
-                const result = await addMovie(id,id_user,backdrop_path,media_type,release_date,vote_average,title,overview)  
+                const result = await addMovie(id,idUser,backdrop_path,media_type,release_date,vote_average,title,overview)  
 
                  if(!result)return messageError(res,401,"Falha ao adicionar serie no banco de dados")
                 
@@ -158,7 +159,7 @@ export class User{
 
             if(!result)return messageError(res,401,"não possível alterar nome e email");
 
-            return messageSuccess(res,200,"nome e email alterados com sucesso");
+            return res.status(200).json({success:true,name:result.name,email:result.email})
 
         } catch (error) {
             console.error("Error ao alterar nome e email: ", error.message);
@@ -167,6 +168,7 @@ export class User{
     }
     async updatePassword(req,res){
         try {
+            
              //dados não enviados ao corpo da requisição
             if(!req.body)return messageError(res,401,"corpo da requisição não foi enviado");
 

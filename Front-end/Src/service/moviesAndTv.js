@@ -92,13 +92,11 @@ export async function addMovieTv(dataTvMovie){
     try {
         let movie;
         let tv;
-        const userString = await getNameEmailId("user") 
-        const user = JSON.parse(userString);
-        console.log("o id é esse: ",user.id)
+        
 
         // filtra ecria o json de filme
         if(dataTvMovie.title){
-            movie ={"id":dataTvMovie.id,"id_user":user.id,"backdrop_path":dataTvMovie.backdrop_path, "media_type":"movie",
+            movie ={"id":dataTvMovie.id,"backdrop_path":dataTvMovie.backdrop_path, "media_type":"movie",
                                         "release_date":dataTvMovie.release_date, "vote_average":dataTvMovie.vote_average,
                                         "title":dataTvMovie.title, "overview":dataTvMovie.overview} 
                                        
@@ -111,7 +109,7 @@ export async function addMovieTv(dataTvMovie){
          //filtra e cria o json de série   
         }else if(dataTvMovie.name || dataTvMovie.tv_name){
             //id,id_user,backdrop_path,media_type,first_air_date,vote_average,name,overview
-            tv = {"id":dataTvMovie.id,"id_user": user.id,"backdrop_path":dataTvMovie.backdrop_path, "media_type":"tv",
+            tv = {"id":dataTvMovie.id,"backdrop_path":dataTvMovie.backdrop_path, "media_type":"tv",
                                         "first_air_date":dataTvMovie.first_air_date, "vote_average":dataTvMovie.vote_average,
                                         "name":dataTvMovie.name || dataTvMovie.tv_name, "overview":dataTvMovie.overview}
 

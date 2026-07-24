@@ -1,16 +1,20 @@
 import { Text,View,StyleSheet,TouchableOpacity } from "react-native"
 import Feather from '@expo/vector-icons/Feather';
-import { useState, useEffect } from "react";
+import { useState, useEffect,useCallback } from "react";
 import { getNameEmailId, logout } from "../service/secureStore.js";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Profile({navigation}){
 
     const [name,setName] = useState([]);
     const [email,setEmail] = useState([]);
 
-    useEffect(()=>{
-        getNameEmail()
-    },[])   
+     useFocusEffect(
+         useCallback(()=>{
+            getNameEmail();
+     
+         },[])
+     )
 
 
      async function getNameEmail() {
