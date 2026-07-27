@@ -25,6 +25,7 @@ export class WhatchMode{
         
             const type = req.query.name;
             const id = req.query.id;
+            console.log("id que está chegando: ", id)
             //se não vier o paramêtro
             if(!type || !id)throw new Error("parametro não foi enviado corretamente") 
                 

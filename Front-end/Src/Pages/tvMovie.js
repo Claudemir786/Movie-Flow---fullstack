@@ -15,7 +15,7 @@ export default function Tvmovie({navigation,route}){
 
     useEffect(()=>{
         const{tvMovie} = route.params
-        //console.log("dados enviados: ", tvMovie)        
+        console.log("dados enviados: ", tvMovie)        
         handleStreaming(tvMovie);  
          //buscas os dados do usuário
         getMyinterests(tvMovie);   
@@ -27,9 +27,13 @@ export default function Tvmovie({navigation,route}){
         try {
             const result = await userInterests();
             //console.log(result);            
-            if(result){                
+            if(result){     
+                //console.log("resutado quando carrega a pagina: ", result);
+                //console.log("resultado que eu tenho na pagina: ", tvmovie)           
                 setIdsMovieTv(result);   
-                 if(result.includes(tvmovie.id)){
+
+                //aqui é validado se os ids de filmes e séries do usário e o mesmo do id do filme ou série atual                
+                 if(result.includes(tvmovie.id_tv || tvmovie.id_movie || tvmovie.id)){
                     setAdded(true);
                  }            
                

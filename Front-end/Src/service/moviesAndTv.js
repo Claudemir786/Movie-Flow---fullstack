@@ -67,13 +67,16 @@ export async function SearchStreaming(dataTvMovie){
     try {
        // console.log("dados da função que envia para API: ", dataTvMovie);
         let result;
+
       //se for filme  
       if(dataTvMovie.title){
-        result = await fetch(`${URL}plataform?name=movie&id=${dataTvMovie.id}`, await options("GET"))
+        //aqui é enviado dependendo da onde está sendo chamado a função atual, se é da pagina de interesses do usuário é
+        //id_movie se for de outra tela é id, essa regra também se aplica quando é com série
+        result = await fetch(`${URL}plataform?name=movie&id=${dataTvMovie.id_movie || dataTvMovie.id}`, await options("GET"))
         
       //se for serie  
       }else{
-        result = await fetch(`${URL}plataform?name=tv&id=${dataTvMovie.id}`, await options("GET"))
+        result = await fetch(`${URL}plataform?name=tv&id=${dataTvMovie.id_tv || dataTvMovie.id}`, await options("GET"))
 
       }
       if(!result.ok)throw new Error("Falha ao retornar dados da API")
@@ -180,15 +183,15 @@ export async function allUserIntrests(){
 export async function removeMovieTv(data) {
     try {
         let result;
-        //console.log(data)
+        console.log(data)
         //se for filme
         if(data.title){
-            result = await fetch(`${URL}removeInterests`, await options("DELETE",{id:data.id, type:"movie"}));
+            result = await fetch(`${URL}removeInterests`, await options("DELETE",{id:data.id_movie, type:"movie"}));
 
         //se for tv    
         }else if(data.name || data.tv_name){
 
-             result = await fetch(`${URL}removeInterests`,await options("DELETE",{id:data.id, type:"tv"}));
+             result = await fetch(`${URL}removeInterests`,await options("DELETE",{id:data.id_tv, type:"tv"}));
 
         }
 
