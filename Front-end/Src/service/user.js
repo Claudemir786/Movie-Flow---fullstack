@@ -109,3 +109,19 @@ export async function passUser(password){
         return false;
     }
 }
+
+export async function create(name,email,password){
+    try {
+
+        const result = await fetch(`${URL}register/user`, optionsLogin("POST",{name:name,email:email,password:password}))
+
+        if(!result.ok)throw new Error("A criação de um novo usuário não deu certo");
+
+        return true;
+        
+    } catch (error) {
+        console.error("os dados de criação não retornaram positivamente: ", error);
+        return false;
+    }
+    
+}

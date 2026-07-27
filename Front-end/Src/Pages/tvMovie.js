@@ -32,7 +32,7 @@ export default function Tvmovie({navigation,route}){
                 //console.log("resultado que eu tenho na pagina: ", tvmovie)           
                 setIdsMovieTv(result);   
 
-                //aqui é validado se os ids de filmes e séries do usário e o mesmo do id do filme ou série atual                
+                //aqui é validado se os ids de filmes e séries do usário é o mesmo do id do filme ou série atual                
                  if(result.includes(tvmovie.id_tv || tvmovie.id_movie || tvmovie.id)){
                     setAdded(true);
                  }            
