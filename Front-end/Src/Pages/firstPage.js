@@ -33,7 +33,7 @@ export default function FirstPage({navigation}) {
             </View>
 
             <ButtonD onpress={()=>navigation.navigate("Register")}/>
-            <ButtonD text='Já tenho uma conta' color='#0F172B' onpress={()=>navigation.navigate("Login")}/>
+            <ButtonD text='Já tenho uma conta' color='#0F172B' textColor={"#fff"} onpress={()=>navigation.navigate("Login")}/>
 
         </ScrollView>
    

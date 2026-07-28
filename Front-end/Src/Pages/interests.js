@@ -9,6 +9,7 @@ export default function Interests({navigation}){
     const [dataMovies,setDataMovies] = useState([]);
     const [dataTv,setDataTv] = useState([]);
     const [loading,setLoading] = useState(true);
+    const [whithoutUserData,setWithoutUserData] = useState(false)
   
     //sempre recarrega os dados da pagina para manter sempre atualizado
     useFocusEffect(
@@ -28,10 +29,15 @@ export default function Interests({navigation}){
             if(result){
                 setDataMovies(result.movie);
                 setDataTv(result.tv);
-                setLoading(false)
+                setWithoutUserData(false);
+                
             }else{
                 console.error("dados não chegaram na pagina");
+                setWithoutUserData(true);
+               
+
             }
+             setLoading(false)
             
         } catch (error) {
             console.error("não foi possivel retornar os dados corretamente");
@@ -85,6 +91,15 @@ export default function Interests({navigation}){
                  {/*icone que fica girando enquanto aguarda os dados*/} 
                 <View style={{marginTop:"20%"}}>
                     <ActivityIndicator color={"#4F39F6"} size={"large"}/>
+                </View>
+            </>
+        )}
+
+        {/*se for confirmado que o usuário não possui nenhum filme ou série cadastrado*/}
+        {whithoutUserData &&(
+            <>
+                <View style={{padding:10}}>
+                    <Text style={{color:'#fff', fontSize:23}}>Não há nenhum filme ou série adicionado</Text>                                            
                 </View>
             </>
         )}

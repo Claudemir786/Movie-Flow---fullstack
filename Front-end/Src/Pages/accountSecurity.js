@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
         padding:15
     },
     titleKey:{
-        fontSize:22,
+        fontSize:20,
         color:'#fff',
         fontWeight:'600',
         marginLeft:'5%',

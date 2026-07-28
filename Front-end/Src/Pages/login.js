@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from "react-native";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import InputD from "../Components/InputDefault";
 import ButtonD from "../Components/ButtonDefault";
@@ -10,17 +10,33 @@ export default function Login({navigation}){
 
     //guarda valores digitados nos inputs
     const [email,setEmail] = useState("");
-    const [password,setPassword] = useState("");
+    const [password,setPassword] = useState("");    
+    const [okPassEmail,setOkPassEmail] = useState(true);
+
 
    async function handleLogin(){
        try {
-            const result = await userLogin(email,password)
-        
-            if(result){
-                navigation.navigate("Tabs")
+
+            const isEmailCorrect = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            const isPasswordCorrect = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password); 
+
+            if(!isEmailCorrect || !isPasswordCorrect){
+                console.log("email ou senha incorretos");
+                setOkPassEmail(false); 
+
             }else{
-                alert("falha no login");
+                 const result = await userLogin(email,password)
+        
+                if(result){
+                    Alert.alert("Login efetuado com sucesso");
+                    navigation.navigate("Tabs")
+                }else{
+
+                   setOkPassEmail(false);
+                }
             }
+
+           
         
        } catch (error) {
             console.error("falha ao realizar o login");
@@ -50,10 +66,17 @@ export default function Login({navigation}){
             </View>
 
             {/*inputs */}
-            <InputD placeholder="seu@email.com" label="E-mail" value={email} onChange={setEmail}/>
+            <InputD placeholder="seu@email.com" label="E-mail" value={email} onChange={setEmail} />
             <View style={{marginTop:30}}></View>
             <InputD placeholder="******" passaword={true} label="Senha" value={password} onChange={setPassword}/>
             
+            {/*email ou senha invalidos */}
+            {!okPassEmail &&(
+                <View>
+                    <Text style={styles.textNameEmailError}>senha ou email incorretos, por favor digite email e senha válidos</Text>
+                </View>
+            )}
+
             {/*esqueceu a senha */}
             <View style={styles.forgotPassword}>
                 <TouchableOpacity style={styles.fgButton} onPress={()=>navigation.navigate("ForgotPass")}>
@@ -143,5 +166,10 @@ const styles = StyleSheet.create({
     registerButton:{
         color:'#4f39f6',
         fontSize:17
+    },
+    textNameEmailError:{
+        color:"#D85869",
+        textAlign:'center',
+        fontSize:20
     }
 })

@@ -13,6 +13,7 @@ import Feather from "@expo/vector-icons/Feather";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useState } from "react";
 import { SearchMovieTv } from "../service/moviesAndTv";
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function Search({ navigation }) {
   const [search, setSearch] = useState([]);
@@ -77,6 +78,16 @@ export default function Search({ navigation }) {
   return (
     <ScrollView style={styles.container}>
         <View style={styles.body}>
+
+          {/*botão de voltar para as categorias*/}
+           {resultSearch && (
+            <View style={styles.comeBack}>
+              <TouchableOpacity style={{flexDirection:'row'}} onPress={()=>{setResultSearch(false)}}>
+                <AntDesign name="arrow-left" size={24} color="#fff" />
+                <Text style={{color:"#fff", fontSize:20,fontWeight:500}}>  Voltar</Text>                
+              </TouchableOpacity>
+            </View>
+           )}
              {/*Cabeçalho com a barra de pesquisa */}
                 <View style={styles.header}>
                     <View style={styles.inputView}>
@@ -107,6 +118,7 @@ export default function Search({ navigation }) {
                     {/*Resultado da pesquisa*/}
                     <Text style={styles.title}>Resultados da pesquisa</Text>
 
+
                     <FlatList
                       
                         data={search}
@@ -117,7 +129,7 @@ export default function Search({ navigation }) {
                         />}
                          
                     />
-                     <Text style={styles.title}>Resultados da pesquisa</Text>
+                    
                     </>
                     
                 ) }
@@ -287,8 +299,8 @@ const styles = StyleSheet.create({
     
     
   },
-  header: {
-    borderWidth: 1,
+  header:{
+   
     borderBlockColor: "#7B837E",
   },
   inputView: {
@@ -297,7 +309,7 @@ const styles = StyleSheet.create({
     width: "90%",
     alignSelf: "center",
     flexDirection: "row",
-    marginTop: "17%",
+    marginTop: "10%",
     borderWidth: 1,
     borderColor: "#7B837E",
     marginBottom: "10%",
@@ -362,10 +374,10 @@ const styles = StyleSheet.create({
   },
   body:{
     width:'90%',
-    alignSelf:'center',
+    alignSelf:'center',             
+  },
+  comeBack:{
+    marginTop:"15%",
     
-    
-    
-     
   }
 });

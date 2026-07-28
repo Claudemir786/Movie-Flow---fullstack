@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         
     },
     input:{
-        backgroundColor:'#0F172B',
+        backgroundColor:'#191f30',
         color:'#878A95',
         padding:20,
         fontSize:25,

@@ -1,8 +1,9 @@
-import { Text,View,StyleSheet,TouchableOpacity } from "react-native"
+import { Text,View,StyleSheet,TouchableOpacity, Alert } from "react-native"
 import Feather from '@expo/vector-icons/Feather';
 import { useState, useEffect,useCallback } from "react";
 import { getNameEmailId, logout } from "../service/secureStore.js";
 import { useFocusEffect } from "@react-navigation/native";
+import { deleteItemAsync } from "expo-secure-store";
 
 export default function Profile({navigation}){
 
@@ -31,9 +32,13 @@ export default function Profile({navigation}){
         }
       async function handleLogout(){
         try {
-            await logout()
-
-            navigation.navigate("FirstPage")
+            
+            await logout();        
+           
+            navigation.getParent()?.reset({
+                index:0,
+                routes:[{name:"FirstPage"}],
+            });
             
         } catch (error) {
             console.error("falha ao fazer o logout");
@@ -89,7 +94,7 @@ export default function Profile({navigation}){
                 </View>   
 
                 {/*Botão de sair*/}
-                <TouchableOpacity style={styles.logoout} onPress={()=>navigation.navigate("FirstPage")}>
+                <TouchableOpacity style={styles.logoout} onPress={()=>handleLogout()}>
                     <Feather name="log-out" size={30} color="#D85869" />
                     <Text style={styles.logooutText}>Sair da Conta</Text>
                 </TouchableOpacity>

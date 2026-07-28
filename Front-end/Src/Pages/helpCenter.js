@@ -84,12 +84,13 @@ const styles = StyleSheet.create({
         alignSelf:'center',
         justifyContent:'space-between',
         marginBottom:'5%',
-        marginTop:'5%'
+        marginTop:'5%',
+        
         
     },
     textButton:{
         color:'#fff',
-        fontSize:22
+        fontSize:17
     },
     description:{
         color:'#808180',
