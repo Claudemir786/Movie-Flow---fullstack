@@ -88,7 +88,7 @@ export default function AccountDetails({navigation}){
                     setCorrect(false);
                 }
         } catch (error) {
-            console.error("falha ao mudar os email ou nome");
+            console.error("falha ao mudar o email ou nome");
         }
 
         

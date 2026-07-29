@@ -88,7 +88,7 @@ export class WhatchMode{
         //busca os dados de streaming
         const result = await fetch(`https://api.watchmode.com/v1/title/${id}/sources/?apiKey=${process.env.WATCHMODE_KEY}`)
         //mensagem de erro caso não encontre
-        if(!result.ok)throw new Error("Dados a respeito das plataformas de straming não retornaram");
+        if(!result.ok)throw new Error("Dados a respeito das plataformas de streaming não retornaram");
         const plataformStreaming = await result.json();
 
         //faz um array com apenas os nomes da plataformas de streaming

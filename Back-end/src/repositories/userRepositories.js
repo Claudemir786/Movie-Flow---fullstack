@@ -16,7 +16,7 @@ export async function userCreate(name,email,password) {
         const [result] = await POOL.query(`INSERT INTO users(name,email,user_password) VALUES(?,?,?)`, [name,email,hashPass])
 
         //se ocorrer algum erro e não tiver nenhuma linha alterada na tabela em questão
-        if(result.affectedRows === 0)throw new Error("não foi posivel fazer insert no banco corretamente")
+        if(result.affectedRows === 0)throw new Error("não foi possivel fazer insert no banco corretamente")
         
         return true;
         

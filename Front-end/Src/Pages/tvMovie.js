@@ -115,7 +115,7 @@ async function toRemove() {
         }
 
     } catch (error) {
-        console.error("falaha ao remover dos interesses");
+        console.error("falha ao remover dos interesses");
     }
 }
   

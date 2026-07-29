@@ -74,7 +74,7 @@ export async function alterEmailName(name,email){
         return true;
 
     } catch (error) {
-        console.error("falha ao altera email e nome: ", error);
+        console.error("falha ao alterar email e nome: ", error);
         return false;
     }
 

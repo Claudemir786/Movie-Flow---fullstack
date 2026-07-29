@@ -68,7 +68,7 @@ export default function Search({ navigation }) {
         //desativa o icône de carregamento
         setLoanding(false);
       } else {
-        alert("filme ou serie não encontrado da base de dados");
+        alert("filme ou serie não encontrado na base de dados");
       }
     } catch (error) {
       console.error("falha ao encontrar dados correspondentes a pesquisa");

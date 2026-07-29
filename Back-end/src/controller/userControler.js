@@ -125,7 +125,7 @@ export class User{
 
     async RemoveInterests(req,res){
         try {
-           console.log("teste de chegada: ",req.body)
+          // console.log("teste de chegada: ",req.body)
             const {id, type} = req.body;
             const idUser = req.user.id;
             if(!id,!type)return messageError(res,401,"Dados enviados incorretamente");
