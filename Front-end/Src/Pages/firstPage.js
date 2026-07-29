@@ -29,7 +29,7 @@ export default function FirstPage({navigation}) {
             <View style={styles.Viewsubtitle}>
                 <Text style={styles.subtitle}>Descubra em qual plataforma de streaming</Text>
                 <Text style={styles.subtitle}>o seu filme ou série favorita está</Text>
-                <Text style={styles.subtitle}>disponível, tudo em um só lugar</Text>
+                <Text style={styles.subtitle}>disponível</Text>
             </View>
 
             <ButtonD onpress={()=>navigation.navigate("Register")}/>
